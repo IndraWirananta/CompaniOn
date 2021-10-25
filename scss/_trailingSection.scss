@@ -1,0 +1,7 @@
+@use 'custom' as *;
+
+.trailingSection{
+    height:100vh;
+    background:  linear-gradient(to right, rgba($white, 0.95), rgba($secondary, 0.95));
+    overflow:hidden;
+}

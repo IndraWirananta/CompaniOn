@@ -1,0 +1,29 @@
+@use 'custom' as *;
+
+.headSection{
+    position:static;
+    overflow:hidden;
+    height:100vh;
+    background:  linear-gradient(to right, rgba($primary, 0.95), rgba($secondary, 0.95));
+}
+
+.headSection .dog_canvas{
+    position:absolute;
+    height: auto;
+    overflow:hidden;
+    left: 50vw;
+    z-index: 1;
+}
+.headSection .headline{
+    top: 20vh;
+    position:absolute;
+    color:$white;
+    overflow:hidden;
+    padding-left: 9vw;
+
+}
+
+.headSection .headline h1{
+    font-weight: 600;
+    font-size: 7vw;
+}
