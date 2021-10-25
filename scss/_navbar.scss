@@ -3,27 +3,73 @@
 .menu{
     background: linear-gradient(to right, rgba($primary, 0.7), rgba($secondary, 0.7));
     position:fixed;
-    z-index: 2;
+    z-index: 9999;
     width: 100vw;
     backdrop-filter: blur(5px);
-    
+
+    .navbar-collapse.collapsing,
+    .navbar-collapse.show {
+        li{
+            margin: 0 0.7rem;
+            padding: 5px;
+            width: 100vw;
+            border-bottom: 1px $secondary solid;
+            text-align: start;
+            // display: flexbox;
+
+            
+            a{
+                color: $white !important;
+                text-transform: capitalize;
+                font-weight: 600;
+                &:hover{
+                    font-weight: 700;
+                }
+            }
+           
+        }
+        .authButton{
+            position: static;
+            padding: 0.2rem 1.05rem;
+            font-weight: 500;
+            width: 100px;
+            margin:10px 10px;
+            border: 0;
+            background-color: $gray-100;
+        
+            &:hover{
+                background:$primary;
+                color: $gray-100;
+                -webkit-box-shadow:inset 0px 0px 0px 1px $gray-100;
+                -moz-box-shadow:inset 0px 0px 0px 1px $gray-100;
+                box-shadow:inset 0px 0px 0px 1px $gray-100;
+            }
+        }
+        .or{
+            border-bottom: 0;
+            left:50px;
+        }
+    }
+
     li{
         margin: 0 0.7rem;
         width: 75px;
         text-align: center;
         // display: flexbox;
-
         a{
             color: $white !important;
             text-transform: capitalize;
             font-weight: 600;
-            
             &:hover{
-                font-weight: 700;
+                transform: scale(1.1);
+                transition: 0.3s;
             }
         }
     }
 }
+// .navbar-collapse{
+//     position:relative;
+// }   
 .or{
     margin: 0 !important;
     padding: 0 !important;

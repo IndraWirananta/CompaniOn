@@ -1,3 +1,33 @@
+@keyframes wiggle {
+    0% {
+      -webkit-transform: rotate(4deg);
+    }
+    50% {
+      -webkit-transform: rotate(-4deg);
+    }
+     100% {
+       -webkit-transform: rotate(4deg);
+     }
+   }
+
 .logo{
-    width: 200px;
+    width: 35vw;
+    margin-bottom: 5px;
+
 }
+.logo_small{
+    width: 50px;
+
+    &:hover{
+        animation: wiggle 0.8s ease infinite;
+    }
+}
+
+@media (max-width: 800px) {
+    .logo{
+        width: 50vw;
+        margin-bottom: 5px;
+    
+    }
+}
+

@@ -1,0 +1,25 @@
+@use 'custom' as *;
+
+.spacer {
+    aspect-ratio: 960/210;
+    width: 100%;
+    background-repeat: no-repeat;
+    background-position: center;
+    background-size: cover;
+  }
+
+  .waveLayer {
+    background-image: url('/assets/images/layeredWave.svg');
+    
+  }
+
+  @media (max-width: 600px) {
+    .spacer {
+        display: none;
+      }
+    
+      .waveLayer {
+        background-image: url('/assets/images/layeredWave.svg');
+        display: none;
+      }
+}
