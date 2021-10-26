@@ -3,8 +3,10 @@
 .headSection{
     position:relative;
     overflow:hidden;
-    padding: 0;
-    margin: 0 ;
+    padding:0;
+    margin:0;
+    border:0;
+    
     z-index: 1;
     height:100vh;
     background:  linear-gradient(to right, rgba($primary, 1), rgba($secondary, 1));
@@ -13,7 +15,7 @@
 .headSection .dog_canvas{
     position:absolute;
     overflow:hidden;
-    left: 46vw;
+    // left: 46vw;
     bottom: 1px;
     z-index: 1;
 }
@@ -86,6 +88,9 @@
 }
 
 @media (max-width: 600px) {
+    .headSection{
+        height: 130vh;
+    }
     .headSection .dog_canvas{
         position: static;
     }
@@ -97,8 +102,12 @@
     .headSection .headline p{
         width:300px; 
         word-wrap: break-word;
-    
-        
+    }
+}
+
+@media (max-width: 600px) {
+    .headSection{
+        height: 130vh;
     }
 }
 
