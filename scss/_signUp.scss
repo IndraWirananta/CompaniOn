@@ -1,0 +1,22 @@
+@use 'custom' as *;
+
+#signupPage{
+    position: fixed;
+    z-index: 100000;
+}
+
+.btn-signup{
+    border-top-left-radius: 0;
+    border-top-right-radius: 0;
+    height: 50px;
+    font-weight: 600;
+
+}
+
+.modal-header{
+    border:0;
+    display:inline;
+    p{
+        margin-top:15px;
+    }
+}

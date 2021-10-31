@@ -1,36 +1,30 @@
-// // import * as THREE from '../node_modules/three/build/three.module.js';
-// // // import { OrbitControls } from 'three/examples/jsm/controls/OrbitControls.js';
-// // import {GLTFLoader} from '../node_modules/three/examples/jsm/loaders/GLTFLoader.js';
+// Import the functions you need from the SDKs you need
+import { initializeApp } from "https://www.gstatic.com/firebasejs/9.1.3/firebase-app.js";
+import {  } from "https://www.gstatic.com/firebasejs/9.1.3/firebase-auth.js";
+import {  } from "https://www.gstatic.com/firebasejs/9.1.3/firebase-firestore.js";
 
-// import * as THREE from 'https://unpkg.com/three@0.126.1/build/three.module.js';
+// TODO: Add SDKs for Firebase products that you want to use
+// https://firebase.google.com/docs/web/setup#available-libraries
 
-// import { GLTFLoader } from 'https://unpkg.com/three@0.126.1/examples/jsm/loaders/GLTFLoader.js';
-// const canvas = document.querySelector('.dog_canvas')
-// const scene = new THREE.Scene()
+// Your web app's Firebase configuration
+// For Firebase JS SDK v7.20.0 and later, measurementId is optional
+const firebaseConfig = {
+    apiKey: "AIzaSyB4sz3w6d7sWBWlqMMHWUGJ6Zjn7ULnuD0",
+    authDomain: "companion-d01bb.firebaseapp.com",
+    projectId: "companion-d01bb",
+    appId: "1:87404646992:web:e3d8d4a5cce3d7575a7755",
+    measurementId: "G-4YP24LS2X8"
+    
+};
 
-// const loader = new GLTFLoader()
-// loader.load('./assets',function(gltf){
-//     console.log(gltf)
-// }, function(xhr){
-//     console.log((xhr.loaded/xhr.total * 100) + "% loaded")
-// },function(error){
-//     console.log("error")
-// })
+// Make Auth and Firestore reference 
+const auth = firebase.auth();
+const db = firebase.firestore();
 
-// const sizes = {
-//     width: window.innerWidth,
-//     height: window.innerHeight
-// }
+// update firestore settings
+db.settings({ timestampsInaSnapshots : true});
 
-// const camera = new THREE.PerspectiveCamera(75,sizes.width/sizes.height, 0.1, 100 )
-// camera.position.set(0,1,2)
-// scene.add(camera)
 
-// const renderer = new THREE.WebGLRenderer({
-//     canvas: canvas
-// })
 
-// renderer.setSize(sizes.width, sizes.height)
-// renderer.setPixelRatio(Math.min(window.devicePixelRatio,2))
-// renderer.shadowMap.enabled = true
-// renderer.gammaOutput = true
+// Initialize Firebase
+const app = initializeApp(firebaseConfig);

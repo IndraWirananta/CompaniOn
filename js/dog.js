@@ -12,7 +12,7 @@ const loader = new GLTFLoader()
 var doggoMesh
 var pivot
 
-loader.load('assets/3d/dog_new.glb',function(glb){
+loader.load('./assets/3d/dog_new.glb',function(glb){
     console.log(glb)
     doggoMesh = glb.scene;
     doggoMesh.scale.set(0.3,0.3,0.3)

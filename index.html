@@ -11,12 +11,12 @@
     <meta name="viewport" content="width=device-width, initial-scale=1">
     <link rel="stylesheet" href="assets/css/style.css">
     <link rel="stylesheet" href="assets/css/fontawesome.css">
-    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
-    <script src="/assets/js/bootstrap.bundle.js"></script>
-    <script type="module" src="./assets/js/dog.js"></script>
+
 </head>
 
 <body>
+
+    <!-- NAVBAR -->
     <nav class="navbar  navbar-expand-lg navbar-light menu shadow-sm ">
         <div class="container">
             <a class="navbar-brand" href="#">
@@ -40,21 +40,17 @@
                     <li class="nav-item">
                         <a class="nav-link active" aria-current="page" href="#">Tutorial</a>
                     </li>
-
                     <button type="button" class="rounded-pill authButton">Login
-
                     </button>
                     <li class="or">or</li>
-
-                    <button type="button" class="rounded-pill authButton">Sign up
-
+                    <button type="button" data-bs-toggle="modal" data-bs-target="#signupPage"
+                        class="rounded-pill authButton">Sign up
                     </button>
-
                 </ul>
-
             </div>
         </div>
     </nav>
+    <!-- HEAD SECTION WITH THE DOOGS -->
     <div class="container-fluid headSection">
         <div class="container headline">
             <img class="logo" src="assets/images/companion.PNG" alt="CompaniOn">
@@ -76,8 +72,47 @@
         <canvas class="dog_canvas">
         </canvas>
     </div>
+
+    <!-- TRANSITIONAL WAVE -->
     <img src="./assets/images/layeredWave.svg" class="wave-mobile img-fluid" alt="">
-    <!-- <div class="spacer waveLayer"></div> -->
+
+    <!-- MODAL FOR SIGNUP -->
+    <div class="modal fade" id="signupPage">
+        <div class="modal-dialog">
+            <form class="modal-content" id="signupForm">
+
+
+                <div class="modal-header text-center">
+                    <h4 class="modal-title text-center w-100 font-weight-bold">Welcome To CompaniOn</h4>
+                    <p class="text-center w-100 font-weight-bold">Please Sign Up to use our services</p>
+                </div>
+
+                <div class="modal-body  mx-3">
+                    <div class="md-form mb-5">
+                        <i class="fas fa-user prefix grey-text"></i>
+                        <label data-error="wrong" data-success="right">Your Name</label>
+                        <input type="text" class="form-control validate">
+
+                    </div>
+
+                    <div class="md-form mb-5">
+                        <i class="fas fa-envelope prefix grey-text"></i>
+                        <label data-error="wrong" data-success="right">Your Email</label>
+                        <input type="email" class="form-control validate">
+                    </div>
+
+
+                    <div class="md-form mb-5">
+                        <i class="fas fa-lock prefix grey-text"></i>
+                        <label data-error="wrong" data-success="right">Your Password</label>
+                        <input type="password" class="form-control validate">
+                    </div>
+                </div>
+                <button class="btn btn-primary btn-signup" type="submit">Sign up</button>
+            </form>
+        </div>
+    </div>
+
 
     <div class="container-fluid trailingSection">
 
@@ -229,6 +264,11 @@
             </div>
         </section>
     </div>
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
+    <script src="/assets/js/bootstrap.bundle.js"></script>
+    <script type="module" src="/js/dog.js"></script>
+    <script type="module" src="/js/main.js"></script>
+    <script src="/js/auth.js"></script>
 
 
 </body>

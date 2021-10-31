@@ -2,6 +2,10 @@
     margin: 0;
     padding: 0;
 }
+
+body {
+    overflow: overlay;
+}
 //THEME COLOR
 $green:   #5cb7bc;
 $green-dark:    #32502E;
