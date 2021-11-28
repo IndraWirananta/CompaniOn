@@ -7,21 +7,12 @@
   
   /* Track */
   ::-webkit-scrollbar-track {
-    background: transparent;
     margin-top: 10px;
-
   }
   
   /* Handle */
   ::-webkit-scrollbar-thumb {
     border-radius: 1rem;
-  background-color:transparent;
   background-image: linear-gradient(to top, $secondary 0%, $primary 100%);
   }
-  
-  /* Handle on hover */
-  ::-webkit-scrollbar-thumb:hover {
-    background: transparent;
-  }
-
-  
+ 
