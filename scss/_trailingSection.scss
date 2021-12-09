@@ -1,9 +1,50 @@
 @use 'custom' as *;
 
-#features{
-    padding-top: 100px;
-    h2{
-        color: $secondary;
-        font-size: 40px;
+.feature-box {
+    position: relative;
+    
+    &__icon {
+       width: 2rem;
+       stroke: $primary; 
+       padding-top: 0.5rem;
+
+       @include media-breakpoint-up(sm) {
+        width: 4rem;
+       }
     }
+
+}
+.feature:hover{
+   
+    transition: all 0.2s ease, color 0ms;
+    transform: scale(1.07);
+    color: $white;
+        .feature-box {
+            &__icon {
+            stroke: $white !important; 
+        }
+    }
+    .shadow{
+        background:  linear-gradient(to right, rgba($primary, 1), rgba($secondary, 1));
+    }
+    
+    
+}
+
+
+#features{
+
+    padding-top: 100px;
+    padding-bottom: 50px;
+    p{
+        overflow: hidden;
+        text-overflow: ellipsis;
+        display: none;
+        display: -webkit-box;
+        -webkit-line-clamp: 2; /* number of lines to show */
+                line-clamp: 2; 
+        -webkit-box-orient: vertical;
+    }
+
+    
 }

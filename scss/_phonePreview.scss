@@ -1,0 +1,26 @@
+@use 'custom' as *;
+
+#phone_preview{
+    margin-top: 50px;
+    margin-bottom: 100px;
+
+    .row{
+        --bs-gutter-x:0;
+    }
+    .phoneImg{
+        padding-left: 20px;
+    }
+    .vl {
+        padding-left: 20px;
+        border-left: 4px solid;
+        border-image: linear-gradient(
+            to bottom, 
+            rgba($primary, 1), 
+            rgba($secondary, 1)
+          ) 1 100%;
+
+        height: 100px;
+    }
+    @media (max-width: 600px) {
+        display: none;}
+}
