@@ -1,18 +1,17 @@
-@use 'custom' as *;
+@use "custom" as *;
 
 /* width */
 ::-webkit-scrollbar {
-    width: 7px;
-  }
-  
-  /* Track */
-  ::-webkit-scrollbar-track {
-    margin-top: 10px;
-  }
-  
-  /* Handle */
-  ::-webkit-scrollbar-thumb {
-    border-radius: 1rem;
+  width: 7px;
+}
+
+/* Track */
+::-webkit-scrollbar-track {
+  margin-top: 10px;
+}
+
+/* Handle */
+::-webkit-scrollbar-thumb {
+  border-radius: 1rem;
   background-image: linear-gradient(to top, $secondary 0%, $primary 100%);
-  }
- 
+}
