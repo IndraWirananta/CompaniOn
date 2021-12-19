@@ -7,101 +7,117 @@ data udh otomatis terupdate meskipun ada di dalem auth.onAuthStateChange
 which is good
 
 ambil label dari key object nya maybe
-
-
 */
 
 var isLoggedIn = false;
-var sensor = [];
+var userUid;
+var snapshot;
 
-function parseModule(sensorData) {
-  var label = [];
-  var reading = [];
-
-  for (i = 0; sensorData[i] != "end" && i < sensorData.length; i++) {
-    label.push(sensorData[i]);
-  }
-
-  console.log(label);
-
-  for (i = 0; i < sensorData.length; i += label.length) {
-    reading.push(sensorData.substr(0, addy.indexOf(",")));
-  }
-}
-
-auth.onAuthStateChanged((user) => {
-  if (user) {
-    isLoggedIn = true;
-    console.log("user logged in: ", user);
-    var userUid = auth.currentUser.uid;
-
-    db.collection("users")
-      .doc(userUid).collection("sensor").doc("kandang").collection("sensor1")
-      .onSnapshot((snapshot) => {
-        sensor = snapshot;
-        snapshot.docs.forEach(doc=>{
-          console.log(doc.data());
-        })
-        console.log(Object.keys(sensor));
-      });
-  } else {
-    console.log("user logged out");
-  }
-});
-
-var MONTHS = [""];
-var config = {
+var chart = new Chart(document.getElementById("canvas"), {
   type: "line",
   data: {
-    labels: ["January", "February", "March", "April", "May", "June", "July"],
     datasets: [
       {
-        label: "My First dataset",
-        backgroundColor: window.chartColors.red,
-        borderColor: window.chartColors.red,
-        data: sensor,
+        label: "Temperature",
+        data: 0,
         fill: false,
       },
     ],
   },
-  options: {
-    responsive: true,
-    title: {
-      display: true,
-      text: "Chart.js Line Chart",
-    },
-    tooltips: {
-      mode: "index",
-      intersect: false,
-    },
-    hover: {
-      mode: "nearest",
-      intersect: true,
-    },
-    scales: {
-      xAxes: [
-        {
-          display: true,
-          scaleLabel: {
-            display: true,
-            labelString: "Month",
-          },
-        },
-      ],
-      yAxes: [
-        {
-          display: true,
-          scaleLabel: {
-            display: true,
-            labelString: "Value",
-          },
-        },
-      ],
-    },
-  },
-};
+});
+
+function addData(data) {
+  if (data) {
+    chart.data.labels.push(data[0].data().timestamp);
+    chart.data.datasets.forEach((dataset) => {
+      dataset.data.push(data[0].data().temperature);
+    });
+    chart.update();
+  }
+}
+
+function updateData() {
+  auth.onAuthStateChanged((user) => {
+    if (user) {
+      isLoggedIn = true;
+      console.log("user logged in: ", user);
+      userUid = auth.currentUser.uid;
+      console.log("Update Data");
+      db.collection("users")
+        .doc(userUid)
+        .collection("sensor")
+        .doc("kandang")
+        .collection("sensor1")
+        .onSnapshot((e) => {
+          addData(e.docs);
+        });
+    } else {
+      console.log("user logged out");
+      userUid = null;
+      document.location.href = window.location.origin + "/index.html";
+    }
+  });
+}
 
 window.onload = function () {
-  var ctx = document.getElementById("canvas").getContext("2d");
-  window.myLine = new Chart(ctx, config);
+  updateData();
 };
+
+// function parseModule(sensorData) {
+//   sensorData.forEach((docs) => {
+//     sensor.push(docs.data());
+//   });
+//   console.log(typeof sensor);
+
+//   config = {
+//     type: "line",
+//     data: {
+//       // labels: ["January", "February", "March", "April", "May", "June", "July"],
+//       datasets: [
+//         {
+//           data: [{ timestamp: "Sales", temperature: 1500 }],
+//         },
+//       ],
+//     },
+//     options: {
+//       parsing: {
+//         xAxisKey: "timestamp",
+//         yAxisKey: "temperature",
+//       },
+//       responsive: true,
+//       title: {
+//         display: true,
+//         text: "Chart.js Line Chart",
+//       },
+//       tooltips: {
+//         mode: "index",
+//         intersect: false,
+//       },
+//       hover: {
+//         mode: "nearest",
+//         intersect: true,
+//       },
+//       scales: {
+//         xAxes: [
+//           {
+//             display: true,
+//             scaleLabel: {
+//               display: true,
+//               labelString: "Month",
+//             },
+//           },
+//         ],
+//         yAxes: [
+//           {
+//             display: true,
+//             scaleLabel: {
+//               display: true,
+//               labelString: "Value",
+//             },
+//           },
+//         ],
+//       },
+//     },
+//   };
+
+// }
