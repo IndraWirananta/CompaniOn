@@ -2,12 +2,12 @@
 <html lang="en" dir="ltr">
 
 <head>
-    <meta charset="UTF-8">
-    <title> CompaniOn</title>
-    <link rel="stylesheet" href="assets/css/style.css">
-    <link rel="stylesheet" href="assets/css/fontawesome.css">
-    <link href='https://unpkg.com/boxicons@2.0.7/css/boxicons.min.css' rel='stylesheet'>
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta charset="UTF-8" />
+    <title>CompaniOn</title>
+    <link rel="stylesheet" href="assets/css/style.css" />
+    <link rel="stylesheet" href="assets/css/fontawesome.css" />
+    <link href="https://unpkg.com/boxicons@2.0.7/css/boxicons.min.css" rel="stylesheet" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
 </head>
 
 <body>
@@ -16,113 +16,153 @@
         <span class="loader"><span class="loader-inner"></span></span>
     </div>
 
+    <!-- MODAL FOR SIGNUP -->
+    <div class="modal fade" id="signupPage">
+        <div class="modal-dialog">
+            <form class="modal-content" id="signupForm">
+                <div class="modal-header text-center">
+                    <h4 class="modal-title text-center w-100 font-weight-bold">
+                        Welcome To CompaniOn
+                    </h4>
+                    <p class="text-center w-100 font-weight-bold">
+                        Please Sign Up to use our services
+                    </p>
+                </div>
+
+                <div class="modal-body mx-3">
+                    <div class="md-form mb-5">
+                        <i class="fas fa-user prefix grey-text"></i>
+                        <label data-error="wrong" data-success="right">Userame</label>
+                        <input type="text" id="name_field_signin" class="form-control validate" />
+                    </div>
+
+                    <div class="md-form mb-5">
+                        <i class="fas fa-envelope prefix grey-text"></i>
+                        <label data-error="wrong" data-success="right">Email</label>
+                        <input type="email" id="email_field_signin" class="form-control validate" />
+                    </div>
+
+                    <div class="md-form mb-5">
+                        <i class="fas fa-lock prefix grey-text"></i>
+                        <label data-error="wrong" data-success="right">Password</label>
+                        <input type="password" id="password_field_signin" class="form-control validate" />
+                    </div>
+                </div>
+                <button class="btn btn-primary btn-signup" type="submit">
+                    Sign up
+                </button>
+            </form>
+        </div>
+    </div>
+
     <!-- actual page -->
     <div class="sidebar close">
         <ul class="nav-links">
             <li id="burger">
-                <a href="#">
-                    <i class='burger_icon bx bxs-chevron-right ' id="burger_icon"></i>
+                <a>
+                    <i class="burger_icon bx bxs-chevron-right" id="burger_icon"></i>
                     <span class="link_name">Companion</span>
                 </a>
-
             </li>
             <li>
-                <a href="#">
-                    <i class='bx bx-grid-alt' onclick="window.location.href='./index.html'"></i>
+                <a>
+                    <i class="bx bx-grid-alt" onclick="window.location.href='./index.html'"></i>
                     <span class="link_name" onclick="window.location.href='./index.html'">Dashboard</span>
                 </a>
                 <ul class="sub-menu blank">
-                    <li><a class="link_name" onclick="window.location.href='./index.html'">Dashboard</a></li>
+                    <li>
+                        <a class="link_name" onclick="window.location.href='./index.html'">Dashboard</a>
+                    </li>
                 </ul>
             </li>
             <li>
                 <div class="icon-link">
-                    <a href="#">
-                        <i class='bx bx-collection'></i>
+                    <a>
+                        <i class="bx bx-collection"></i>
                         <span class="link_name">Category</span>
                     </a>
-                    <i class='bx bxs-chevron-down arrow'></i>
+                    <i class="bx bxs-chevron-down arrow"></i>
                 </div>
                 <ul class="sub-menu">
-                    <li><a class="link_name" href="#">Category</a></li>
-                    <li><a href="#">HTML & CSS</a></li>
-                    <li><a href="#">JavaScript</a></li>
-                    <li><a href="#">PHP & MySQL</a></li>
+                    <li><a class="link_name">Category</a></li>
+                    <li><a>HTML & CSS</a></li>
+                    <li><a>JavaScript</a></li>
+                    <li><a>PHP & MySQL</a></li>
                 </ul>
             </li>
             <li>
                 <div class="icon-link">
-                    <a href="#">
-                        <i class='bx bx-book-alt'></i>
+                    <a>
+                        <i class="bx bx-book-alt"></i>
                         <span class="link_name">Posts</span>
                     </a>
-                    <i class='bx bxs-chevron-down arrow'></i>
+                    <i class="bx bxs-chevron-down arrow"></i>
                 </div>
                 <ul class="sub-menu">
-                    <li><a class="link_name" href="#">Posts</a></li>
-                    <li><a href="#">Web Design</a></li>
-                    <li><a href="#">Login Form</a></li>
-                    <li><a href="#">Card Design</a></li>
+                    <li><a class="link_name">Posts</a></li>
+                    <li><a>Web Design</a></li>
+                    <li><a>Login Form</a></li>
+                    <li><a>Card Design</a></li>
                 </ul>
             </li>
             <li>
-                <a href="#">
-                    <i class='bx bx-pie-chart-alt-2'></i>
+                <a>
+                    <i class="bx bx-pie-chart-alt-2"></i>
                     <span class="link_name">Analytics</span>
                 </a>
                 <ul class="sub-menu blank">
-                    <li><a class="link_name" href="#">Analytics</a></li>
+                    <li><a class="link_name">Analytics</a></li>
                 </ul>
             </li>
             <li>
-                <a href="#">
-                    <i class='bx bx-line-chart'></i>
+                <a>
+                    <i class="bx bx-line-chart"></i>
                     <span class="link_name">Chart</span>
                 </a>
                 <ul class="sub-menu blank">
-                    <li><a class="link_name" href="#">Chart</a></li>
+                    <li><a class="link_name">Chart</a></li>
                 </ul>
             </li>
             <li>
                 <div class="icon-link">
-                    <a href="#">
-                        <i class='bx bx-plug'></i>
+                    <a>
+                        <i class="bx bx-plug"></i>
                         <span class="link_name">Plugins</span>
                     </a>
-                    <i class='bx bxs-chevron-down arrow'></i>
+                    <i class="bx bxs-chevron-down arrow"></i>
                 </div>
                 <ul class="sub-menu">
-                    <li><a class="link_name" href="#">Plugins</a></li>
-                    <li><a href="#">UI Face</a></li>
-                    <li><a href="#">Pigments</a></li>
-                    <li><a href="#">Box Icons</a></li>
+                    <li><a class="link_name">Plugins</a></li>
+                    <li><a>UI Face</a></li>
+                    <li><a>Pigments</a></li>
+                    <li><a>Box Icons</a></li>
                 </ul>
             </li>
             <li>
-                <a href="#">
-                    <i class='bx bx-compass'></i>
+                <a>
+                    <i class="bx bx-compass"></i>
                     <span class="link_name">Explore</span>
                 </a>
                 <ul class="sub-menu blank">
-                    <li><a class="link_name" href="#">Explore</a></li>
+                    <li><a class="link_name">Explore</a></li>
                 </ul>
             </li>
             <li>
-                <a href="#">
-                    <i class='bx bx-history'></i>
+                <a>
+                    <i class="bx bx-history"></i>
                     <span class="link_name">History</span>
                 </a>
                 <ul class="sub-menu blank">
-                    <li><a class="link_name" href="#">History</a></li>
+                    <li><a class="link_name">History</a></li>
                 </ul>
             </li>
             <li>
-                <a href="#">
-                    <i class='bx bx-cog'></i>
+                <a>
+                    <i class="bx bx-cog"></i>
                     <span class="link_name">Setting</span>
                 </a>
                 <ul class="sub-menu blank">
-                    <li><a class="link_name" href="#">Setting</a></li>
+                    <li><a class="link_name">Setting</a></li>
                 </ul>
             </li>
             <li>
@@ -134,29 +174,131 @@
                         <div class="profile_name">Prem Shahi</div>
                         <div class="job">Web Desginer</div>
                     </div>
-                    <i class='bx bx-log-out'></i>
+                    <i class="bx bx-log-out"></i>
                 </div>
             </li>
         </ul>
     </div>
-    <section class="home-section">
-        <div class="container-fluid top-bar">
-            test
-        </div>
 
-        <div class="container-fluid ">
-            <div style="width:75%;">
-                <canvas id="canvas"></canvas>
+    <section class="real-display">
+        <div class="navbar navbar-expand-lg navbar-light navbar-main menu shadow-sm">
+            <a class="navbar-brand">
+                <img class="logo-medium" src="assets/images/companion.PNG" alt="CompaniOn" />
+            </a>
+            <button type="button" data-bs-toggle="modal" data-bs-target="#signupPage" class="rounded-pill authButton">
+                Sign up
+            </button>
+        </div>
+        <div class="chart-area">
+            <div style="height: 50px"></div>
+            <div class="card">
+                <div class="card-body">
+                    <h4 class="card-title">Title</h4>
+                    <p class="card-text">Body</p>
+                </div>
             </div>
-
-            <!-- <button id="randomizeData">Randomize Data</button>
-            <button id="addDataset">Add Dataset</button>
-            <button id="removeDataset">Remove Dataset</button>
-            <button id="addData">Add Data</button>
-            <button id="removeData">Remove Data</button> -->
+            <div class="card">
+                <div class="card-body">
+                    <h4 class="card-title">Title</h4>
+                    <p class="card-text">Body</p>
+                </div>
+            </div>
+            <div class="card">
+                <div class="card-body">
+                    <h4 class="card-title">Title</h4>
+                    <p class="card-text">Body</p>
+                </div>
+            </div>
+            <div class="card">
+                <div class="card-body">
+                    <h4 class="card-title">Title</h4>
+                    <p class="card-text">Body</p>
+                </div>
+            </div>
+            <div class="card">
+                <div class="card-body">
+                    <h4 class="card-title">Title</h4>
+                    <p class="card-text">Body</p>
+                </div>
+            </div>
+            <div class="card">
+                <div class="card-body">
+                    <h4 class="card-title">Title</h4>
+                    <p class="card-text">Body</p>
+                </div>
+            </div>
+            <div class="card">
+                <div class="card-body">
+                    <h4 class="card-title">Title</h4>
+                    <p class="card-text">Body</p>
+                </div>
+            </div>
+            <div class="card">
+                <div class="card-body">
+                    <h4 class="card-title">Title</h4>
+                    <p class="card-text">Body</p>
+                </div>
+            </div>
+            <div class="card">
+                <div class="card-body">
+                    <h4 class="card-title">Title</h4>
+                    <p class="card-text">Body</p>
+                </div>
+            </div>
+            <div class="card">
+                <div class="card-body">
+                    <h4 class="card-title">Title</h4>
+                    <p class="card-text">Body</p>
+                </div>
+            </div>
+            <div class="card">
+                <div class="card-body">
+                    <h4 class="card-title">Title</h4>
+                    <p class="card-text">Body</p>
+                </div>
+            </div>
+            <div class="card">
+                <div class="card-body">
+                    <h4 class="card-title">Title</h4>
+                    <p class="card-text">Body</p>
+                </div>
+            </div>
+            <div class="card">
+                <div class="card-body">
+                    <h4 class="card-title">Title</h4>
+                    <p class="card-text">Body</p>
+                </div>
+            </div>
+            <div class="card">
+                <div class="card-body">
+                    <h4 class="card-title">Title</h4>
+                    <p class="card-text">Body</p>
+                </div>
+            </div>
+            <div class="card">
+                <div class="card-body">
+                    <h4 class="card-title">Title</h4>
+                    <p class="card-text">Body</p>
+                </div>
+            </div>
+            <div class="card">
+                <div class="card-body">
+                    <h4 class="card-title">Title</h4>
+                    <p class="card-text">Body</p>
+                </div>
+            </div>
+            <div class="card">
+                <div class="card-body">
+                    <h4 class="card-title">Title</h4>
+                    <p class="card-text">Body</p>
+                </div>
+            </div>
+            <div class="card">
+                <div class="card-body chart">
+                    <canvas class="canvas" id="canvas"></canvas>
+                </div>
+            </div>
         </div>
-
-
     </section>
 
     <script src="https://www.chartjs.org/dist/2.6.0/Chart.bundle.js"></script>
@@ -166,69 +308,10 @@
     <script src="https://www.gstatic.com/firebasejs/5.6.0/firebase-firestore.js"></script>
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
     <script src="/assets/js/bootstrap.bundle.js"></script>
-    <script src="/js/firebase.js"></script>>
+    <script src="/js/firebase.js"></script>
     <script src="/js/sidebar.js"></script>
     <script src="/js/loading_screen.js"></script>
-    <script src="/js/chart_main.js"></script>
+    <script src="/js/main.js"></script>
 </body>
 
 </html>
-
-<!-- document.getElementById('randomizeData').addEventListener('click', function () {
-            config.data.datasets.forEach(function (dataset) {
-                dataset.data = dataset.data.map(function () {
-                    return randomScalingFactor();
-                });
-
-            });
-
-            window.myLine.update();
-        });
-
-        var colorNames = Object.keys(window.chartColors);
-        document.getElementById('addDataset').addEventListener('click', function () {
-            var colorName = colorNames[config.data.datasets.length % colorNames.length];
-            var newColor = window.chartColors[colorName];
-            var newDataset = {
-                label: 'Dataset ' + config.data.datasets.length,
-                backgroundColor: newColor,
-                borderColor: newColor,
-                data: [],
-                fill: false
-            };
-
-            for (var index = 0; index < config.data.labels.length; ++index) {
-                newDataset.data.push(randomScalingFactor());
-            }
-
-            config.data.datasets.push(newDataset);
-            window.myLine.update();
-        });
-
-        document.getElementById('addData').addEventListener('click', function () {
-            if (config.data.datasets.length > 0) {
-                var month = MONTHS[config.data.labels.length % MONTHS.length];
-                config.data.labels.push(month);
-
-                config.data.datasets.forEach(function (dataset) {
-                    dataset.data.push(randomScalingFactor());
-                });
-
-                window.myLine.update();
-            }
-        });
-
-        document.getElementById('removeDataset').addEventListener('click', function () {
-            config.data.datasets.splice(0, 1);
-            window.myLine.update();
-        });
-
-        document.getElementById('removeData').addEventListener('click', function () {
-            config.data.labels.splice(-1, 1); // remove the label first
-
-            config.data.datasets.forEach(function (dataset, datasetIndex) {
-                dataset.data.pop();
-            });
-
-            window.myLine.update();
-        }); -->

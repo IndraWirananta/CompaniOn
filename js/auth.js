@@ -2,7 +2,7 @@
 auth.onAuthStateChanged((user) => {
   if (user) {
     console.log("user logged in: ", user);
-    document.location.href = window.location.origin + "/main.html";
+    // document.location.href = window.location.origin + "/main.html";
   } else {
     console.log("user logged out");
   }
@@ -28,6 +28,7 @@ signupForm.addEventListener("submit", (e) => {
       email: email,
       name: name,
       password: password,
+      sensor:[],
     });
     signupForm.reset();
   });
