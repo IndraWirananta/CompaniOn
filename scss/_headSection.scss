@@ -6,7 +6,6 @@
     padding:0;
     margin:0;
     border:0;
-    
     z-index: 1;
     height:100vh;
     background:  linear-gradient(to right, rgba($primary, 1), rgba($secondary, 1));
@@ -42,12 +41,61 @@
     
 }
 
+.hide-start-button{
+    display: none;   
+}
 .startButton{
     position: relative;
     padding: 0.2rem 1.05rem;
     font-weight: 500;
     width: 200px;
     padding:10px 0;
+    margin-bottom: 10px;
+    border: 0;
+    background-color: $gray-100;
+    // color: $primary;
+
+    &:hover{
+        // background:$primary;
+        // color: $gray-100;
+        // -webkit-box-shadow:inset 0px 0px 0px 1px $gray-100;
+        // -moz-box-shadow:inset 0px 0px 0px 1px $gray-100;
+        // box-shadow:inset 0px 0px 0px 1px $gray-100;
+        transform: scale(1.07);
+        transition: 0.3s;
+        span{
+            opacity: 1;
+            transition: 0.3s;
+        }
+    }
+
+    span{
+        position: absolute;
+        // opacity: 0;
+        background-color: $primary;
+        width: 2.5rem;
+        height: 2.5rem;
+        border-radius: 50%;
+        top: 50%;
+        right: 3px;
+        transform: translateY(-50%);
+
+        i{
+            color: $white;
+            font-size: 1rem;
+            line-height: 2.5rem;
+            left: 1px;
+        }
+    }
+}
+
+.appsButton{
+    position: relative;
+
+    font-weight: 500;
+    width: 200px;
+    padding:10px 0;
+    padding-right: 22px;
     margin-bottom: 10px;
     border: 0;
     background-color: $gray-100;

@@ -34,7 +34,7 @@ body {
   --bs-gray-100: #f8f9fa;
   --bs-gray-200: #e9ecef;
   --bs-gray-300: #dee2e6;
-  --bs-gray-400: #ced4da;
+  --bs-gray-400: #e4e9f7;
   --bs-gray-500: #adb5bd;
   --bs-gray-600: #6c757d;
   --bs-gray-700: #495057;
@@ -2196,7 +2196,7 @@ progress {
   color: #212529;
   background-color: #fff;
   background-clip: padding-box;
-  border: 1px solid #ced4da;
+  border: 1px solid #e4e9f7;
   appearance: none;
   border-radius: 0.25rem;
   transition: border-color 0.15s ease-in-out, box-shadow 0.15s ease-in-out;
@@ -2366,7 +2366,7 @@ textarea.form-control-lg {
   background-repeat: no-repeat;
   background-position: right 0.75rem center;
   background-size: 16px 12px;
-  border: 1px solid #ced4da;
+  border: 1px solid #e4e9f7;
   border-radius: 0.25rem;
   transition: border-color 0.15s ease-in-out, box-shadow 0.15s ease-in-out;
   appearance: none;
@@ -2683,7 +2683,7 @@ textarea.form-control-lg {
   text-align: center;
   white-space: nowrap;
   background-color: #e9ecef;
-  border: 1px solid #ced4da;
+  border: 1px solid #e4e9f7;
   border-radius: 0.25rem;
 }
 
@@ -11244,7 +11244,8 @@ textarea.form-control-lg {
   padding: 0.2rem 1.05rem;
   font-weight: 500;
   width: 100px;
-  margin: 0 10px;
+  margin-right: 30px;
+  margin-left: 30px;
   border: 0;
   background-color: #f8f9fa;
 }
@@ -11294,6 +11295,10 @@ textarea.form-control-lg {
   word-wrap: break-word;
 }
 
+.hide-start-button {
+  display: none;
+}
+
 .startButton {
   position: relative;
   padding: 0.2rem 1.05rem;
@@ -11323,6 +11328,41 @@ textarea.form-control-lg {
   transform: translateY(-50%);
 }
 .startButton span i {
+  color: #fff;
+  font-size: 1rem;
+  line-height: 2.5rem;
+  left: 1px;
+}
+
+.appsButton {
+  position: relative;
+  font-weight: 500;
+  width: 200px;
+  padding: 10px 0;
+  padding-right: 22px;
+  margin-bottom: 10px;
+  border: 0;
+  background-color: #f8f9fa;
+}
+.appsButton:hover {
+  transform: scale(1.07);
+  transition: 0.3s;
+}
+.appsButton:hover span {
+  opacity: 1;
+  transition: 0.3s;
+}
+.appsButton span {
+  position: absolute;
+  background-color: #4bd793;
+  width: 2.5rem;
+  height: 2.5rem;
+  border-radius: 50%;
+  top: 50%;
+  right: 3px;
+  transform: translateY(-50%);
+}
+.appsButton span i {
   color: #fff;
   font-size: 1rem;
   line-height: 2.5rem;
@@ -11745,63 +11785,6 @@ textarea.form-control-lg {
   transform: translateY(-50%);
 }
 
-.sidebar .profile-details {
-  position: fixed;
-  bottom: 0;
-  width: 260px;
-  display: flex;
-  align-items: center;
-  justify-content: space-between;
-  background: #1d1b31;
-  padding: 12px 0;
-  transition: all 0.5s ease;
-}
-
-.sidebar.close .profile-details {
-  background: none;
-}
-
-.sidebar.close .profile-details {
-  width: 78px;
-}
-
-.sidebar .profile-details .profile-content {
-  display: flex;
-  align-items: center;
-}
-
-.sidebar .profile-details img {
-  height: 52px;
-  width: 52px;
-  object-fit: cover;
-  border-radius: 16px;
-  margin: 0 14px 0 12px;
-  background: #1d1b31;
-  transition: all 0.5s ease;
-}
-
-.sidebar.close .profile-details img {
-  padding: 10px;
-}
-
-.sidebar .profile-details .profile_name,
-.sidebar .profile-details .job {
-  color: #fff;
-  font-size: 18px;
-  font-weight: 500;
-  white-space: nowrap;
-}
-
-.sidebar.close .profile-details i,
-.sidebar.close .profile-details .profile_name,
-.sidebar.close .profile-details .job {
-  display: none;
-}
-
-.sidebar .profile-details .job {
-  font-size: 12px;
-}
-
 @media (max-width: 420px) {
   .sidebar.close .nav-links li .sub-menu {
     display: none;
@@ -11813,12 +11796,136 @@ canvas {
   -ms-user-select: none;
 }
 
+.chartWrapper {
+  position: relative;
+  background-color: #fff;
+  border-radius: 10px;
+}
+
+.chartWrapper > canvas {
+  position: absolute;
+  left: 0;
+  top: 0;
+  pointer-events: none;
+}
+
+.chartAreaWrapper {
+  overflow-x: scroll;
+  position: relative;
+  width: 100%;
+}
+
+.chartAreaWrapper2 {
+  position: relative;
+  height: 300px;
+}
+
 .real-display {
   position: relative;
-  background: #e4e9f7;
   left: 78px;
   width: calc(100% - 78px);
-  transition: all 0.5s ease;
+}
+
+.appbar-main {
+  position: fixed;
+  z-index: 9;
+  left: 78px;
+  width: calc(100% - 78px);
+  background-color: #fff !important;
+}
+
+.appbar-main .appbar-header {
+  justify-content: space-between;
+  background: linear-gradient(to right, #4bd793, #5cb7bc);
+  padding: 10px;
+}
+
+.appbar-main .appbar-tools {
+  padding: 7px;
+  padding-left: 30px;
+  background: #fff;
+}
+
+.appbar-main .appbar-tools .sensor-status-online {
+  font-size: 14px;
+  color: #5cb7bc;
+  padding-right: 5px;
+}
+
+.appbar-main .appbar-tools .sensor-status-offline {
+  font-size: 14px;
+  color: #dc3545;
+  padding-right: 5px;
+}
+
+.appbar-main .appbar-tools .sensor-total {
+  padding-right: 20px;
+}
+
+.appbar-main .user-welcome-message p {
+  margin: auto;
+  color: #fff;
+}
+
+.add-sensor-button {
+  padding: 3px 15px;
+  margin-right: 10px;
+  font-weight: 500;
+  border: 0;
+  background-color: #f8f9fa;
+}
+.add-sensor-button:hover {
+  background: #4bd793;
+  color: #f8f9fa;
+}
+.add-sensor-button .add-sensor-icon {
+  vertical-align: middle;
+  padding-right: 10px;
+  padding-bottom: 0.1rem;
+}
+
+.sensor-btn-active {
+  background: #4bd793;
+  color: #f8f9fa;
+}
+
+#collapseSensor hr {
+  margin: 0;
+  margin-bottom: 15px;
+  padding: 0;
+}
+
+#collapseSensor .add-sensor-body {
+  padding-left: 30px;
+  padding-right: 30px;
+  padding-bottom: 30px;
+  padding-top: 10px;
+}
+
+.logout-button {
+  padding-right: 20px;
+  padding-left: 20px;
+  height: 40px;
+  margin-right: 10px;
+  font-weight: 500;
+  border: 0;
+  background-color: #f8f9fa;
+}
+.logout-button:hover {
+  background: #4bd793;
+  color: #f8f9fa;
+  -webkit-box-shadow: inset 0px 0px 0px 1px #f8f9fa;
+  -moz-box-shadow: inset 0px 0px 0px 1px #f8f9fa;
+  box-shadow: inset 0px 0px 0px 1px #f8f9fa;
+}
+.logout-button .logout-icon {
+  vertical-align: middle;
+  padding-left: 10px;
+  padding-bottom: 0.1rem;
+}
+
+.body-main {
+  background: #e4e9f7;
 }
 
 .real-display .chart-area {
@@ -11830,8 +11937,8 @@ canvas {
   width: 15vw;
 }
 
-.chart {
-  height: 50vh;
+.shadow-toolbar {
+  box-shadow: 0 4px 5px -1px rgba(108, 117, 125, 0.2);
 }
 
 body {

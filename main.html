@@ -7,52 +7,14 @@
     <link rel="stylesheet" href="assets/css/style.css" />
     <link rel="stylesheet" href="assets/css/fontawesome.css" />
     <link href="https://unpkg.com/boxicons@2.0.7/css/boxicons.min.css" rel="stylesheet" />
+    <link rel="icon" type="image/png" href="assets/images/favicon-32x32.png" sizes="32x32" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
 </head>
 
-<body>
+<body class="body-main">
     <!-- load screen -->
     <div class="loader-wrapper">
         <span class="loader"><span class="loader-inner"></span></span>
-    </div>
-
-    <!-- MODAL FOR SIGNUP -->
-    <div class="modal fade" id="signupPage">
-        <div class="modal-dialog">
-            <form class="modal-content" id="signupForm">
-                <div class="modal-header text-center">
-                    <h4 class="modal-title text-center w-100 font-weight-bold">
-                        Welcome To CompaniOn
-                    </h4>
-                    <p class="text-center w-100 font-weight-bold">
-                        Please Sign Up to use our services
-                    </p>
-                </div>
-
-                <div class="modal-body mx-3">
-                    <div class="md-form mb-5">
-                        <i class="fas fa-user prefix grey-text"></i>
-                        <label data-error="wrong" data-success="right">Userame</label>
-                        <input type="text" id="name_field_signin" class="form-control validate" />
-                    </div>
-
-                    <div class="md-form mb-5">
-                        <i class="fas fa-envelope prefix grey-text"></i>
-                        <label data-error="wrong" data-success="right">Email</label>
-                        <input type="email" id="email_field_signin" class="form-control validate" />
-                    </div>
-
-                    <div class="md-form mb-5">
-                        <i class="fas fa-lock prefix grey-text"></i>
-                        <label data-error="wrong" data-success="right">Password</label>
-                        <input type="password" id="password_field_signin" class="form-control validate" />
-                    </div>
-                </div>
-                <button class="btn btn-primary btn-signup" type="submit">
-                    Sign up
-                </button>
-            </form>
-        </div>
     </div>
 
     <!-- actual page -->
@@ -165,149 +127,127 @@
                     <li><a class="link_name">Setting</a></li>
                 </ul>
             </li>
-            <li>
-                <div class="profile-details">
-                    <div class="profile-content">
-                        <!--<img src="image/profile.jpg" alt="profileImg">-->
-                    </div>
-                    <div class="name-job">
-                        <div class="profile_name">Prem Shahi</div>
-                        <div class="job">Web Desginer</div>
-                    </div>
-                    <i class="bx bx-log-out"></i>
-                </div>
-            </li>
         </ul>
     </div>
-
+    <!-- REAL DISPLAY SECTION -->
     <section class="real-display">
-        <div class="navbar navbar-expand-lg navbar-light navbar-main menu shadow-sm">
-            <a class="navbar-brand">
-                <img class="logo-medium" src="assets/images/companion.PNG" alt="CompaniOn" />
-            </a>
-            <button type="button" data-bs-toggle="modal" data-bs-target="#signupPage" class="rounded-pill authButton">
-                Sign up
-            </button>
+        <div class="appbar-main">
+            <div class="appbar-header">
+                <div class="hstack gap-3">
+                    <a class="navbar-brand">
+                        <img class="logo-medium" src="assets/images/companion.PNG" alt="CompaniOn" />
+                    </a>
+                    <div class="vr"></div>
+                    <div class="user-welcome-message align-middle">
+                        <p id="welcome-message">Welcome Message</p>
+                    </div>
+                    <button id="logout" type="button" class="rounded-pill logout-button ms-auto">
+                        <span>Log out<i class="bx bx-log-out logout-icon"></i> </span>
+                    </button>
+                </div>
+            </div>
+            <!-- TOOLBAR -->
+            <div id="toolbar" class="appbar-tools shadow-toolbar">
+                <div class="hstack gap-3">
+                    <div>
+                        <i class="bx bxs-circle sensor-status-online"></i>
+                        <span class="sensor-total">5 Online</span>
+                    </div>
+                    <div>
+                        <i class="bx bxs-circle sensor-status-offline"></i>
+                        <span class="sensor-total">5 Offline</span>
+                    </div>
+                    <button type="button" id="add-sensor" onclick="changeShadow()" data-bs-toggle="collapse"
+                        data-bs-target="#collapseSensor" class="rounded-pill add-sensor-button" aria-expanded="true"
+                        aria-controls="collapseSensor">
+                        <span><i class="bx bxs-plus-circle add-sensor-icon"></i>Add
+                            Sensor</span>
+                    </button>
+                </div>
+            </div>
+            <!-- collapse for creating new sensor -->
+            <div id="collapseSensor" class="collapseSensor collapse" aria-labelledby="addSensor">
+                <div class="add-sensor-body">
+                    <hr />
+                    <div id="alert-add-sensor"></div>
+                    <form class="modal-content" id="addSensorForm">
+                        <div class="modal-body mx-3">
+                            <div class="md-form mb-2">
+                                <div class="row">
+                                    <div class="col">
+                                        <label data-error="wrong" data-success="right">Name</label>
+                                        <input type="text" id="sensor_name_field" class="form-control validate" />
+                                    </div>
+                                    <div class="col">
+                                        <label data-error="wrong" data-success="right">Group</label>
+                                        <input type="text" id="sensor_group_field" class="form-control validate" />
+                                    </div>
+                                    <div class="col-6">
+                                        <label data-error="wrong" data-success="right">Description</label>
+                                        <input type="text" id="sensor_description_field"
+                                            class="form-control validate me-auto" />
+                                    </div>
+                                </div>
+                            </div>
+
+                            <!-- <div class="md-form mb-2">
+                                <i class="fas fa-envelope prefix grey-text"></i>
+                                <label data-error="wrong" data-success="right">Email</label>
+                                <input type="email" id="email_field_signin" class="form-control validate" />
+                            </div>
+
+                            <div class="md-form mb-2">
+                                <i class="fas fa-lock prefix grey-text"></i>
+                                <label data-error="wrong" data-success="right">Password</label>
+                                <input type="password" id="password_field_signin" class="form-control validate" />
+                            </div> -->
+                        </div>
+                        <button class="btn btn-primary btn-signup" type="submit">
+                            Add Sensor
+                        </button>
+                    </form>
+                </div>
+            </div>
         </div>
-        <div class="chart-area">
-            <div style="height: 50px"></div>
-            <div class="card">
+        <!-- CHART AREA -->
+        <div class="chart-area" id="chart-area-test">
+            <div style="height: 100px"></div>
+            <!-- <div class="card mb-3">
+          <div class="card-body chart">
+            <canvas class="canvas" id="canvas"></canvas>
+          </div>
+        </div> -->
+
+            <div class="chartWrapper">
+                <div class="chartAreaWrapper">
+                    <div class="chartAreaWrapper2">
+                        <canvas class="chart" id="chart"></canvas>
+
+                    </div>
+
+                </div>
+                <canvas id="myChartAxis" height="300" width="20"></canvas>
+
+            </div>
+            <!-- <div class="card mb-3">
                 <div class="card-body">
                     <h4 class="card-title">Title</h4>
                     <p class="card-text">Body</p>
                 </div>
-            </div>
-            <div class="card">
-                <div class="card-body">
-                    <h4 class="card-title">Title</h4>
-                    <p class="card-text">Body</p>
-                </div>
-            </div>
-            <div class="card">
-                <div class="card-body">
-                    <h4 class="card-title">Title</h4>
-                    <p class="card-text">Body</p>
-                </div>
-            </div>
-            <div class="card">
-                <div class="card-body">
-                    <h4 class="card-title">Title</h4>
-                    <p class="card-text">Body</p>
-                </div>
-            </div>
-            <div class="card">
-                <div class="card-body">
-                    <h4 class="card-title">Title</h4>
-                    <p class="card-text">Body</p>
-                </div>
-            </div>
-            <div class="card">
-                <div class="card-body">
-                    <h4 class="card-title">Title</h4>
-                    <p class="card-text">Body</p>
-                </div>
-            </div>
-            <div class="card">
-                <div class="card-body">
-                    <h4 class="card-title">Title</h4>
-                    <p class="card-text">Body</p>
-                </div>
-            </div>
-            <div class="card">
-                <div class="card-body">
-                    <h4 class="card-title">Title</h4>
-                    <p class="card-text">Body</p>
-                </div>
-            </div>
-            <div class="card">
-                <div class="card-body">
-                    <h4 class="card-title">Title</h4>
-                    <p class="card-text">Body</p>
-                </div>
-            </div>
-            <div class="card">
-                <div class="card-body">
-                    <h4 class="card-title">Title</h4>
-                    <p class="card-text">Body</p>
-                </div>
-            </div>
-            <div class="card">
-                <div class="card-body">
-                    <h4 class="card-title">Title</h4>
-                    <p class="card-text">Body</p>
-                </div>
-            </div>
-            <div class="card">
-                <div class="card-body">
-                    <h4 class="card-title">Title</h4>
-                    <p class="card-text">Body</p>
-                </div>
-            </div>
-            <div class="card">
-                <div class="card-body">
-                    <h4 class="card-title">Title</h4>
-                    <p class="card-text">Body</p>
-                </div>
-            </div>
-            <div class="card">
-                <div class="card-body">
-                    <h4 class="card-title">Title</h4>
-                    <p class="card-text">Body</p>
-                </div>
-            </div>
-            <div class="card">
-                <div class="card-body">
-                    <h4 class="card-title">Title</h4>
-                    <p class="card-text">Body</p>
-                </div>
-            </div>
-            <div class="card">
-                <div class="card-body">
-                    <h4 class="card-title">Title</h4>
-                    <p class="card-text">Body</p>
-                </div>
-            </div>
-            <div class="card">
-                <div class="card-body">
-                    <h4 class="card-title">Title</h4>
-                    <p class="card-text">Body</p>
-                </div>
-            </div>
-            <div class="card">
-                <div class="card-body chart">
-                    <canvas class="canvas" id="canvas"></canvas>
-                </div>
-            </div>
+            </div> -->
         </div>
     </section>
+    <a href="#" class="shadow btn-primary rounded-circle back-to-top">
+        <i class="fas fa-chevron-up"></i>
+    </a>
 
-    <script src="https://www.chartjs.org/dist/2.6.0/Chart.bundle.js"></script>
-    <script src="https://www.chartjs.org/samples/2.6.0/utils.js"></script>
     <script src="https://www.gstatic.com/firebasejs/5.6.0/firebase-app.js"></script>
     <script src="https://www.gstatic.com/firebasejs/5.6.0/firebase-auth.js"></script>
     <script src="https://www.gstatic.com/firebasejs/5.6.0/firebase-firestore.js"></script>
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
     <script src="/assets/js/bootstrap.bundle.js"></script>
+    <script src="https://www.chartjs.org/dist/2.6.0/Chart.bundle.js"></script>
+    <script src="https://www.chartjs.org/samples/2.6.0/utils.js"></script>
     <script src="/js/firebase.js"></script>
     <script src="/js/sidebar.js"></script>
     <script src="/js/loading_screen.js"></script>

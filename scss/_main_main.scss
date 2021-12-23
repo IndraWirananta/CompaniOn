@@ -2,19 +2,113 @@
 
 .real-display {
   position: relative;
-  background: #e4e9f7;
   left: 78px;
   width: calc(100% - 78px);
-  transition: all 0.5s ease;
+}
+.appbar-main {
+  position: fixed;
+  z-index: 9;
+  left: 78px;
+  width: calc(100% - 78px);
+  background-color: $white !important;
+}
+.appbar-main .appbar-header {
+  justify-content: space-between;
+  background: linear-gradient(to right, rgba($primary, 1), rgba($secondary, 1));
+  padding: 10px;
+}
+.appbar-main .appbar-tools {
+  padding: 7px;
+  padding-left: 30px;
+  background: $white;
+}
+.appbar-main .appbar-tools .sensor-status-online {
+  font-size: 14px;
+  color: $green;
+  padding-right: 5px;
+}
+.appbar-main .appbar-tools .sensor-status-offline {
+  font-size: 14px;
+  color: $red;
+  padding-right: 5px;
+}
+.appbar-main .appbar-tools .sensor-total {
+  padding-right: 20px;
+}
+.appbar-main .user-welcome-message p {
+  margin: auto;
+  color: $white;
+}
+
+.appbar-tools .collapseSensor{
+ 
+}
+.add-sensor-button{
+  padding: 3px 15px;
+  margin-right: 10px;
+  font-weight: 500;
+  border: 0;
+  background-color: $gray-100;
+  &:hover {
+    background: $primary;
+    color: $gray-100;
+  }
+  .add-sensor-icon {
+    vertical-align: middle;
+    padding-right: 10px;
+    padding-bottom: 0.1rem;
+  }
+}
+.sensor-btn-active{
+  background: $primary;
+  color: $gray-100;
+}
+
+#collapseSensor hr{
+  margin:0;
+  margin-bottom:15px;
+  padding:0;
+}
+
+#collapseSensor .add-sensor-body{
+  padding-left:30px;
+  padding-right:30px;
+  padding-bottom:30px;
+  padding-top:10px;
+}
+
+.logout-button {
+  padding-right: 20px;
+  padding-left: 20px;
+  height: 40px;
+  margin-right: 10px;
+  font-weight: 500;
+  border: 0;
+  background-color: $gray-100;
+  &:hover {
+    background: $primary;
+    color: $gray-100;
+    -webkit-box-shadow: inset 0px 0px 0px 1px $gray-100;
+    -moz-box-shadow: inset 0px 0px 0px 1px $gray-100;
+    box-shadow: inset 0px 0px 0px 1px $gray-100;
+  }
+  .logout-icon {
+    vertical-align: middle;
+    padding-left: 10px;
+    padding-bottom: 0.1rem;
+  }
+}
+.body-main {
+  background: $gray-400;
 }
 .real-display .chart-area {
   padding: 20px;
 }
-.logo-medium{
-    margin-left: 20px;
-    width: 15vw;
+.logo-medium {
+  margin-left: 20px;
+  width: 15vw;
 }
-.chart{
-    height: 50vh;
-    // width: 50%;
+
+.shadow-toolbar{
+  box-shadow: 0 4px 5px -1px rgba($gray-600,0.2);
 }

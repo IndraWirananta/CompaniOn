@@ -46,20 +46,12 @@
                     <li class="nav-item">
                         <a class="nav-link active" aria-current="page" href="#features">Features</a>
                     </li>
-                    <button type=" button" data-bs-toggle="modal" data-bs-target="#loginPage"
+                    <button type="button" id="login-button" data-bs-toggle="modal" data-bs-target="#loginPage"
                         class="rounded-pill authButton">Login
                     </button>
-                    <li class="or">or</li>
-                    <button type="button" data-bs-toggle="modal" data-bs-target="#signupPage"
-                        class="rounded-pill authButton">Sign up
+                    <button type="button" id="logout" class="rounded-pill authButton ">Logout
                     </button>
-                    <button type="button" id="logout" class="rounded-pill authButton">Log
-                        Out
-                    </button>
-                    <button type="button" onclick="window.location.href='./main.html'"
-                        class="rounded-pill authButton">Go To
-                        Apps
-                    </button>
+
                 </ul>
             </div>
         </div>
@@ -74,7 +66,14 @@
             <p>Why use $100 pet monitor for a $5 pet hamster? <br>Start using our service today, for free! no string
                 attached!</p>
 
-            <button type="button" class="rounded-pill startButton">Start Now
+            <button id="start-now" type="button" data-bs-toggle="modal" data-bs-target="#signupPage"
+                class="rounded-pill startButton">Start Now
+                <span>
+                    <i class="fas fa-play"></i>
+                </span>
+            </button>
+            <button id="go-to-apps" type="button" class="rounded-pill appsButton hide-start-button">Go
+                to Apps
                 <span>
                     <i class="fas fa-play"></i>
                 </span>
@@ -544,7 +543,7 @@
     <script src="/assets/js/bootstrap.bundle.js"></script>
     <script src="/js/firebase.js"></script>
     <script type="module" src="/js/dog.js"></script>
-    <script src="/js/auth.js"></script>
+    <script src="/js/index.js"></script>
     <script src="/js/loading_screen.js"></script>
 </body>
 

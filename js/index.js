@@ -3,11 +3,23 @@ auth.onAuthStateChanged((user) => {
   if (user) {
     console.log("user logged in: ", user);
     // document.location.href = window.location.origin + "/main.html";
+    document.getElementById("start-now").classList.add("hide-start-button")
+    document.getElementById("go-to-apps").classList.remove("hide-start-button")
+    document.getElementById("login-button").classList.add("hide-start-button")
+    document.getElementById("logout").classList.remove("hide-start-button")
   } else {
     console.log("user logged out");
+    document.getElementById("start-now").classList.remove("hide-start-button")
+    document.getElementById("go-to-apps").classList.add("hide-start-button")
+    document.getElementById("login-button").classList.remove("hide-start-button")
+    document.getElementById("logout").classList.add("hide-start-button")
   }
 });
-
+//Go to apps
+const goToApps = document.querySelector('#go-to-apps');
+goToApps.addEventListener("click",(e)=>{
+  document.location.href = window.location.origin + "/main.html";
+})
 //SIGN UP
 const signupForm = document.querySelector("#signupForm");
 signupForm.addEventListener("submit", (e) => {
@@ -28,7 +40,6 @@ signupForm.addEventListener("submit", (e) => {
       email: email,
       name: name,
       password: password,
-      sensor:[],
     });
     signupForm.reset();
   });
@@ -40,6 +51,7 @@ logout.addEventListener("click", (e) => {
   e.preventDefault();
   auth.signOut().then(() => {
     console.log("user signed out");
+    window.location.reload();
   });
 });
 
@@ -51,7 +63,7 @@ loginForm.addEventListener("submit", (e) => {
   // get user info
   const email = loginForm["email_field_login"].value;
   const password = loginForm["password_field_login"].value;
-
+  console.log(email,password)
   auth.signInWithEmailAndPassword(email, password).then((cred) => {
     console.log(cred.user);
     console.log("test");
