@@ -11481,6 +11481,12 @@ textarea.form-control-lg {
   background-image: linear-gradient(to top, #5cb7bc 0%, #4bd793 100%);
 }
 
+.chartWrapper ::-webkit-scrollbar-track {
+  box-shadow: inset 0 0 5px rgba(173, 181, 189, 0.2);
+  background: rgba(173, 181, 189, 0.2);
+  border-radius: 10px;
+}
+
 #signupPage {
   position: fixed;
   z-index: 100000;
@@ -11798,7 +11804,8 @@ canvas {
 
 .chartWrapper {
   position: relative;
-  background-color: #fff;
+  box-shadow: inset 0 0 5px rgba(173, 181, 189, 0.2);
+  background-color: #f8f9fa;
   border-radius: 10px;
 }
 
@@ -11939,6 +11946,12 @@ canvas {
 
 .shadow-toolbar {
   box-shadow: 0 4px 5px -1px rgba(108, 117, 125, 0.2);
+}
+
+.group-wrapper {
+  box-shadow: inset 0 0 5px rgba(173, 181, 189, 0.3);
+  background-color: rgba(248, 249, 250, 0.5);
+  border-radius: 10px;
 }
 
 body {

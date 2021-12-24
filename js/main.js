@@ -1,12 +1,8 @@
 /*
 TODO
 
-Sort dataset berdasarkan timestamp
-ubah scroll yg ada di chartnya
-buatin group
-buatin header chartnya
-buatin online offline
-
+Update chart -> data udh disimpen di array map yg isinya group[sensor], sekarang datanya itu 
+bakal dipake untuk buat chart2 yang lain
 */
 
 var isLoggedIn = false;
@@ -85,6 +81,8 @@ addSensorForm.addEventListener("submit", (e) => {
   var name = addSensorForm.sensor_name_field.value;
   var group = addSensorForm.sensor_group_field.value;
   var desc = addSensorForm.sensor_description_field.value;
+  var foundSensor = false
+
   if (name == "" || name == null || group == "" || group == null) {
     console.log("error1");
     $("#add-sensor-alert").remove();
@@ -133,6 +131,30 @@ addSensorForm.addEventListener("submit", (e) => {
                   $("#alert-add-sensor").append(
                     '<div id="add-sensor-alert" class="alert alert-success alert-dismissible fade show" role="alert">Sensor added successfuly!<button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button></div>'
                   );
+                  db.collection("users")
+                  .doc(userUid).get().then((snapshot)=>{
+                    listOfSensor = snapshot.data().sensor
+                    for(i=0;i<listOfSensor.length;i++){
+                      console.log(listOfSensor[i].name , group)
+                      if(listOfSensor[i].name  == group && !foundSensor){
+                        console.log("up")
+                        foundSensor= true
+                        listOfSensor[i].sensor.push(name)
+                        db.collection("users")
+                        .doc(userUid).update({
+                          sensor: listOfSensor
+                        })
+                      }
+                    }
+                    if(!foundSensor){
+                      console.log("bottom")
+                      db.collection("users")
+                          .doc(userUid).set({
+                            sensor: firebase.firestore.FieldValue.arrayUnion({"name":group, "sensor":[name]})
+                          },{merge:true})
+                    }
+                  })
+                 
                   addSensorForm.reset();
                 })
                 .catch((error) => {
@@ -206,55 +228,68 @@ function createChart() {
       e.forEach((doc) => {});
     });
 }
-
 function updateChart() {
-  db.collection("users")
-    .doc(userUid)
-    .collection("sensor")
-    .doc("kandang")
-    .collection("sensor1")
-    .get()
-    .then((e) => {
-      e.forEach((doc) => {
-        console.log(doc.data().timestamp);
-        if (doc.id != "info") {
-          var options = {
-            weekday: "short",
-            hour: "numeric",
-            minute: "numeric",
-          };
-          var d = new Date(doc.data().timestamp * 1000);
-          myChart.data.labels.push(d.toLocaleDateString("en", options));
-          myChart.data.datasets.forEach((dataset) => {
-            dataset.data.push(doc.data().temperature);
-          });
-        }
-      });
-      
-      var newwidth = $(".chartAreaWrapper2").width() + 100 * e.docs.length;
-      $(".chartAreaWrapper2").width(newwidth);
-      $(".chartAreaWrapper").animate({
-        scrollLeft: newwidth,
-      });
-
-      myChart.update();
-      setTimeout(function () {
-        var sourceCanvas = myChart.chart.canvas;
-        var copyWidth = myChart.scales['y-axis-0'].width + 10 ;
-        var copyHeight = myChart.scales['y-axis-0'].height + myChart.scales['y-axis-0'].top - 10;
-        var targetCtx = document.getElementById("myChartAxis").getContext("2d");
-        targetCtx.canvas.width = copyWidth;
-        targetCtx.drawImage(sourceCanvas, 0, 0, copyWidth, copyHeight, 0, 0, copyWidth, copyHeight);
-      }, 350);
-     
-
-     
-    })
-    .catch((error) => {
-      console.log(error);
+  
+  db.collection("users").doc(userUid).get().then()
+  db.collection("users").doc(userUid).collection("sensor").get().then((e)=>{
+    e.forEach((doc)=>{
+      db.collection("users")
+          .doc(userUid)
+          .collection("sensor")
+          .doc(doc.id).get().then((e)=>{
+            console.log(e)
+          })
     });
+  })
+  
 }
 
+// db.collection("users")
+// .doc(userUid)
+// .collection("sensor")
+// .doc(doc.id)
+// .collection("sensor1")
+// .get()
+// .then((e) => {
+//   e.forEach((doc) => {
+//     console.log(doc.data().timestamp);
+//     if (doc.id != "info") {
+//       var options = {
+//         weekday: "short",
+//         hour: "numeric",
+//         minute: "numeric",
+//       };
+//       var d = new Date(doc.data().timestamp * 1000);
+//       myChart.data.labels.push(d.toLocaleDateString("en", options));
+//       myChart.data.datasets.forEach((dataset) => {
+//         dataset.data.push(doc.data().temperature);
+//       });
+//     }
+//   });
+  
+//   var newwidth = $(".chartAreaWrapper2").width() + 100 * e.docs.length;
+//   $(".chartAreaWrapper2").width(newwidth);
+//   $(".chartAreaWrapper").animate({
+//     scrollLeft: newwidth,
+//   });
+
+//   myChart.update();
+//   setTimeout(function () {
+//     var sourceCanvas = myChart.chart.canvas;
+//     var copyWidth = myChart.scales['y-axis-0'].width + 10 ;
+//     var copyHeight = myChart.scales['y-axis-0'].height + myChart.scales['y-axis-0'].top - 10;
+//     var targetCtx = document.getElementById("myChartAxis").getContext("2d");
+//     targetCtx.canvas.width = copyWidth;
+//     targetCtx.drawImage(sourceCanvas, 0, 0, copyWidth, copyHeight, 0, 0, copyWidth, copyHeight);
+//   }, 350);
+
+
+
+// })
+// .catch((error) => {
+//   console.log(error);
+// });
+// });
 window.onload = function () {
   auth.onAuthStateChanged((user) => {
     if (user) {
