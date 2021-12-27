@@ -1,9 +1,13 @@
 /*
 TODO
 
+IMPORTANT : udh bisa nambah category (sensor yg di pake dimodul), itu di push ke info masing2
+modul. Terus dipake pas buat / baca chartnya
+
 Update chart -> data udh disimpen di array map yg isinya group[sensor], sekarang datanya itu 
 bakal dipake untuk buat chart2 yang lain
 */
+
 
 var isLoggedIn = false;
 var userUid;
@@ -72,6 +76,70 @@ function getWelcomeMessage() {
       var data = e.data().name;
       welcomeMessage.innerHTML = welcomeTime + ", " + data;
     });
+}
+// handle scroll if category too long
+const slider = document.querySelector('#sensor-category');
+let isDown = false;
+let startX;
+let scrollLeft;
+
+slider.addEventListener('mousedown', (e) => {
+  isDown = true;
+  startX = e.pageX - slider.offsetLeft;
+  scrollLeft = slider.scrollLeft;
+});
+slider.addEventListener('mouseleave', () => {
+  isDown = false;
+});
+slider.addEventListener('mouseup', () => {
+  isDown = false;
+});
+slider.addEventListener('mousemove', (e) => {
+  if(!isDown) return;
+  e.preventDefault();
+  const x = e.pageX - slider.offsetLeft;
+  const walk = (x - startX) ; //scroll-fast
+  slider.scrollLeft = scrollLeft - walk;
+});
+
+// add category
+const addCategoryBtn = document.getElementById("add-category-btn");
+const addCategoryInput = document.getElementById("add-category-input");
+var arrCategory = []
+addCategoryBtn.addEventListener("click", (e)=>{
+  e.preventDefault();
+  if(addCategoryInput.value==null || addCategoryInput.value==""){
+    $("#add-sensor-alert").remove();
+    $("#alert-add-sensor").append(
+      '<div id="add-sensor-alert" class="alert alert-danger alert-dismissible fade show" role="alert">Sensor module cannot be empty!<button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button></div>'
+    )
+  }else if(arrCategory.indexOf(addCategoryInput.value)!=-1){
+    $("#add-sensor-alert").remove();
+    $("#alert-add-sensor").append(
+      '<div id="add-sensor-alert" class="alert alert-danger alert-dismissible fade show" role="alert">Sensor module must have unique name!<button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button></div>'
+    )
+  }else{
+    arrCategory.push(addCategoryInput.value)
+    $("#add-sensor-alert").remove();
+    addCategory(arrCategory)
+  }
+  
+})
+function addCategory(input){
+  $("#sensor-category").empty()
+  addCategoryInput.value =''
+  input.forEach(function(e,index){
+    console.log(e)  
+    $("#sensor-category").append('<li class="list-group-item category-item">' + e +'<button type="button" onclick="deleteCategory('+"'"+e+"'"+')" class="category-del"><i style="vertical-align:middle" " class="bx category-delete-btn bx-x"></i></button></li>')
+  })
+}
+// delete category
+function deleteCategory(e){
+  const index = arrCategory.indexOf(e);
+  if (index > -1) {
+  arrCategory.splice(index, 1)
+  addCategory(arrCategory)
+}
 }
 // Form Controller
 const addSensorForm = document.getElementById("addSensorForm");
@@ -229,18 +297,40 @@ function createChart() {
     });
 }
 function updateChart() {
-  
-  db.collection("users").doc(userUid).get().then()
-  db.collection("users").doc(userUid).collection("sensor").get().then((e)=>{
-    e.forEach((doc)=>{
-      db.collection("users")
-          .doc(userUid)
-          .collection("sensor")
-          .doc(doc.id).get().then((e)=>{
-            console.log(e)
+
+  db.collection("users").doc(userUid).get().then((userDoc)=>{
+      var sensorList = userDoc.data().sensor
+      for (i = 0;i<sensorList.length;i++){
+        var groupName = sensorList[i].name
+        $("#chart-area").append(
+          '<div class="card text-start"><div class="card text-start"><div class="card-body" id="card-'+groupName+'"><h2 class="card-title">'+groupName+'</h2></div></div></div>'
+        );
+        for(y=0;y<sensorList[i].sensor.length;y++){
+          var sensorName = sensorList[i].sensor[y]
+          $("#card"+groupName).append(
+            '<div class="card-body group-wrapper id="wrapper-'+sensorName+'""><h3 class="card-title">'+sensorName+'</h3></div>'
+          );
+          // REMEMBER TO PUT ERROR HANDLER INCASE OF NO SENSOR INPUT YET
+          db.collection("users").doc(userUid).collection("sensor").doc(groupName).collection(sensorName).get().then((doc)=>{
+            var keys = Object.keys(doc[0].data());
+            doc.forEach((docs)=>{
+              keys = Object.keys(docs.data());
+            })
           })
-    });
+          // db.collection("users").doc(userUid).collection("sensor").doc(groupName).get().then((e)=>{
+          //   e.forEach((doc)=>{
+          //     db.collection("users")
+          //         .doc(userUid)
+          //         .collection("sensor")
+          //         .doc(doc.id).get().then((e)=>{
+          //           console.log(e)
+          //         })
+          //   });
+          // })
+      }
+      }
   })
+  
   
 }
 
