@@ -160,8 +160,9 @@
                     <button type="button" id="add-sensor" onclick="changeShadow()" data-bs-toggle="collapse"
                         data-bs-target="#collapseSensor" class="rounded-pill add-sensor-button" aria-expanded="true"
                         aria-controls="collapseSensor">
+
                         <span><i class="bx bxs-plus-circle add-sensor-icon"></i>Add
-                            Sensor</span>
+                            Module</span>
                     </button>
                 </div>
             </div>
@@ -189,23 +190,22 @@
                                     </div>
                                 </div>
                                 <div class="row mt-3">
-                                    <div class="col-3" style="padding-right:0;">
-                                        <label data-error="wrong" data-success="right">Description</label>
-                                        <input id="add-category-input" class="form-control validate "
-                                            style="border-radius:0.25rem 0rem 0rem 0.25rem;" />
+                                    <div class="col-3" style="padding-right: 0">
+                                        <label data-error="wrong" data-success="right">Sensors</label>
+                                        <input id="add-category-input" class="form-control validate"
+                                            style="border-radius: 0.25rem 0rem 0rem 0.25rem" />
                                     </div>
-                                    <div class="col-1 mt-auto" style="padding-left:0;">
+                                    <div class="col-1 mt-auto" style="padding-left: 0">
                                         <button id="add-category-btn" type="add-category"
-                                            class="btn btn-primary rounded-end"
-                                            style="border-radius:0 0.25rem 0.25rem 0;">Add</button>
+                                            class="text-module-button btn btn-primary rounded-end"
+                                            style="border-radius: 0 0.25rem 0.25rem 0">
+                                            Add
+                                        </button>
                                     </div>
                                     <div class="col mt-auto category-scrollable">
-                                        <ul class="list-group list-group-horizontal" id="sensor-category">
-
-                                        </ul>
+                                        <ul class="list-group list-group-horizontal" id="sensor-category"></ul>
                                     </div>
                                 </div>
-
                             </div>
 
                             <!-- <div class="md-form mb-2">
@@ -220,8 +220,8 @@
                                 <input type="password" id="password_field_signin" class="form-control validate" />
                             </div> -->
                         </div>
-                        <button class="btn btn-primary btn-signup" type="submit">
-                            Add Sensor
+                        <button class="btn btn-primary btn-signup text-module-button" type="submit">
+                            Add Module
                         </button>
                     </form>
                 </div>
@@ -236,15 +236,17 @@
             <canvas class="canvas" id="canvas"></canvas>
           </div>
         </div> -->
-            <div class="card text-start">
-                <div class="card text-start|center|end">
+            <!-- <div class="card text-start">
+                <div class="card text-start">
                     <div class="card-body">
                         <h2 class="card-title">Kandang</h2>
                         <p class="card-text">5 Sensor</p>
                         <div class="card-body group-wrapper">
                             <h3 class="card-title">Sensor1</h3>
                             <h5 class="card-text mt-5">Temperature</h5>
-                            <p class="card-text">This is the only currently working sensor</p>
+                            <p class="card-text">
+                                This is the only currently working sensor
+                            </p>
                             <div class="chartWrapper">
                                 <div class="chartAreaWrapper">
                                     <div class="chartAreaWrapper2">
@@ -254,7 +256,9 @@
                                 <canvas id="myChartAxis" height="300" width="20"></canvas>
                             </div>
                             <h5 class="card-text mt-5">Temperature</h5>
-                            <p class="card-text ">This is the only currently working sensor</p>
+                            <p class="card-text">
+                                This is the only currently working sensor
+                            </p>
                             <div class="chartWrapper">
                                 <div class="chartAreaWrapper">
                                     <div class="chartAreaWrapper2">
@@ -266,7 +270,7 @@
                         </div>
                     </div>
                 </div>
-            </div>
+            </div> -->
             <!-- <div class="card-body group-wrapper">
             <h3 class="card-title">Sensor1</h3>
             
@@ -298,7 +302,7 @@
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
     <script src="/assets/js/bootstrap.bundle.js"></script>
     <script src="https://www.chartjs.org/dist/2.6.0/Chart.bundle.js"></script>
-    <script src="https://www.chartjs.org/samples/2.6.0/utils.js"></script>
+    <!-- <script src="https://www.chartjs.org/samples/2.6.0/utils.js"></script> -->
     <script src="/js/firebase.js"></script>
     <script src="/js/sidebar.js"></script>
     <script src="/js/loading_screen.js"></script>

@@ -1,17 +1,18 @@
 /*
 TODO
 
-IMPORTANT : udh bisa nambah category (sensor yg di pake dimodul), itu di push ke info masing2
-modul. Terus dipake pas buat / baca chartnya
-
-Update chart -> data udh disimpen di array map yg isinya group[sensor], sekarang datanya itu 
-bakal dipake untuk buat chart2 yang lain
+update chart-> sort by latest timestamp -> add to chart -> profit
 */
-
 
 var isLoggedIn = false;
 var userUid;
-var snapshot;
+
+//option for chart date format
+var options = {
+  weekday: "short",
+  hour: "numeric",
+  minute: "numeric",
+};
 
 //for logout purposes
 const logout = document.querySelector("#logout");
@@ -22,6 +23,11 @@ logout.addEventListener("click", (e) => {
     document.location.href = window.location.origin + "/index.html";
   });
 });
+
+//capitalize first letter
+function capitalizeFirstLetter(string) {
+  return string.charAt(0).toUpperCase() + string.slice(1);
+}
 
 //change toolbar shadow
 function changeShadow() {
@@ -36,11 +42,9 @@ function changeShadow() {
     setTimeout(function () {
       document.getElementById("toolbar").classList.add("shadow-toolbar");
     }, 350);
-    console.log("removed shadow");
   } else {
     document.getElementById("collapseSensor").classList.add("shadow-toolbar");
     document.getElementById("toolbar").classList.remove("shadow-toolbar");
-    console.log("added shadow");
   }
 }
 
@@ -78,70 +82,83 @@ function getWelcomeMessage() {
     });
 }
 // handle scroll if category too long
-const slider = document.querySelector('#sensor-category');
+const slider = document.querySelector("#sensor-category");
 let isDown = false;
 let startX;
 let scrollLeft;
 
-slider.addEventListener('mousedown', (e) => {
+slider.addEventListener("mousedown", (e) => {
   isDown = true;
   startX = e.pageX - slider.offsetLeft;
   scrollLeft = slider.scrollLeft;
 });
-slider.addEventListener('mouseleave', () => {
+slider.addEventListener("mouseleave", () => {
   isDown = false;
 });
-slider.addEventListener('mouseup', () => {
+slider.addEventListener("mouseup", () => {
   isDown = false;
 });
-slider.addEventListener('mousemove', (e) => {
-  if(!isDown) return;
+slider.addEventListener("mousemove", (e) => {
+  if (!isDown) return;
   e.preventDefault();
   const x = e.pageX - slider.offsetLeft;
-  const walk = (x - startX) ; //scroll-fast
+  const walk = x - startX; //scroll-fast
   slider.scrollLeft = scrollLeft - walk;
 });
 
 // add category
 const addCategoryBtn = document.getElementById("add-category-btn");
 const addCategoryInput = document.getElementById("add-category-input");
-var arrCategory = []
-addCategoryBtn.addEventListener("click", (e)=>{
+var arrCategory = [];
+addCategoryBtn.addEventListener("click", (e) => {
   e.preventDefault();
-  if(addCategoryInput.value==null || addCategoryInput.value==""){
+  if (addCategoryInput.value == null || addCategoryInput.value == "") {
     $("#add-sensor-alert").remove();
     $("#alert-add-sensor").append(
       '<div id="add-sensor-alert" class="alert alert-danger alert-dismissible fade show" role="alert">Sensor module cannot be empty!<button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button></div>'
-    )
-  }else if(arrCategory.indexOf(addCategoryInput.value)!=-1){
+    );
+  } else if (arrCategory.indexOf(addCategoryInput.value) != -1) {
     $("#add-sensor-alert").remove();
     $("#alert-add-sensor").append(
       '<div id="add-sensor-alert" class="alert alert-danger alert-dismissible fade show" role="alert">Sensor module must have unique name!<button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button></div>'
-    )
-  }else{
-    arrCategory.push(addCategoryInput.value)
+    );
+  } else {
+    arrCategory.push(addCategoryInput.value);
     $("#add-sensor-alert").remove();
-    addCategory(arrCategory)
+    addCategory(arrCategory);
   }
-  
-})
-function addCategory(input){
-  $("#sensor-category").empty()
-  addCategoryInput.value =''
-  input.forEach(function(e,index){
-    console.log(e)  
-    $("#sensor-category").append('<li class="list-group-item category-item">' + e +'<button type="button" onclick="deleteCategory('+"'"+e+"'"+')" class="category-del"><i style="vertical-align:middle" " class="bx category-delete-btn bx-x"></i></button></li>')
-  })
+});
+function addCategory(input) {
+  $("#sensor-category").empty();
+  addCategoryInput.value = "";
+  input.forEach(function (e, index) {
+    console.log(e);
+    $("#sensor-category").append(
+      '<li class="list-group-item category-item">' +
+        e +
+        '<button type="button" onclick="deleteCategory(' +
+        "'" +
+        e +
+        "'" +
+        ')" class="category-del"><i style="vertical-align:middle" " class="bx category-delete-btn bx-x"></i></button></li>'
+    );
+  });
 }
 // delete category
-function deleteCategory(e){
+function deleteCategory(e) {
   const index = arrCategory.indexOf(e);
   if (index > -1) {
-  arrCategory.splice(index, 1)
-  addCategory(arrCategory)
+    arrCategory.splice(index, 1);
+    addCategory(arrCategory);
+  }
 }
+// clear category
+function deleteCategory() {
+  arrCategory.length = 0;
+  addCategory(arrCategory);
 }
-// Form Controller
+
+// Form Controller for adding sensor
 const addSensorForm = document.getElementById("addSensorForm");
 addSensorForm.addEventListener("submit", (e) => {
   e.preventDefault();
@@ -149,246 +166,406 @@ addSensorForm.addEventListener("submit", (e) => {
   var name = addSensorForm.sensor_name_field.value;
   var group = addSensorForm.sensor_group_field.value;
   var desc = addSensorForm.sensor_description_field.value;
-  var foundSensor = false
 
-  if (name == "" || name == null || group == "" || group == null) {
-    console.log("error1");
+  if (
+    name == "" ||
+    name == null ||
+    group == "" ||
+    group == null ||
+    arrCategory.length == 0
+  ) {
     $("#add-sensor-alert").remove();
     $("#alert-add-sensor").append(
-      '<div id="add-sensor-alert" class="alert alert-danger alert-dismissible fade show" role="alert">Name and group cannot be empty!<button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button></div>'
+      '<div id="add-sensor-alert" class="alert alert-danger alert-dismissible fade show" role="alert">Name, group, and sensor cannot be empty!<button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button></div>'
     );
   } else {
     db.collection("users")
       .doc(userUid)
       .collection("sensor")
-      .doc(group)
-      .collection(name)
+      .doc(name)
       .get()
       .then((doc) => {
-        console.log(doc.docs.length);
-        if (doc.docs.length > 0) {
+        if (typeof doc.data() !== "undefined") {
+          // check if sensor with the same name exist
           $("#add-sensor-alert").remove();
           $("#alert-add-sensor").append(
             '<div id="add-sensor-alert" class="alert alert-danger alert-dismissible fade show" role="alert">Name already taken by other sensor!<button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button></div>'
           );
         } else {
-          //add group
           db.collection("users")
             .doc(userUid)
             .collection("sensor")
-            .doc(group)
+            .doc(name)
             .set({
-              name: group,
-              nickname: null,
+              name: name,
+              desc: desc,
+              group: group,
+              sensors: arrCategory,
+              isOn: true,
+              reading: [],
             })
-            //add sensor
             .then(() => {
-              db.collection("users")
-                .doc(userUid)
-                .collection("sensor")
-                .doc(group)
-                .collection(name)
-                .doc("info")
-                .set({
-                  name: name,
-                  nickname: null,
-                  desc: desc,
-                })
-                .then(() => {
-                  $("#add-sensor-alert").remove();
-                  $("#alert-add-sensor").append(
-                    '<div id="add-sensor-alert" class="alert alert-success alert-dismissible fade show" role="alert">Sensor added successfuly!<button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button></div>'
-                  );
-                  db.collection("users")
-                  .doc(userUid).get().then((snapshot)=>{
-                    listOfSensor = snapshot.data().sensor
-                    for(i=0;i<listOfSensor.length;i++){
-                      console.log(listOfSensor[i].name , group)
-                      if(listOfSensor[i].name  == group && !foundSensor){
-                        console.log("up")
-                        foundSensor= true
-                        listOfSensor[i].sensor.push(name)
-                        db.collection("users")
-                        .doc(userUid).update({
-                          sensor: listOfSensor
-                        })
-                      }
-                    }
-                    if(!foundSensor){
-                      console.log("bottom")
-                      db.collection("users")
-                          .doc(userUid).set({
-                            sensor: firebase.firestore.FieldValue.arrayUnion({"name":group, "sensor":[name]})
-                          },{merge:true})
-                    }
-                  })
-                 
-                  addSensorForm.reset();
-                })
-                .catch((error) => {
-                  console.error("Error writing document: ", error);
-                });
+              $("#add-sensor-alert").remove();
+              $("#alert-add-sensor").append(
+                '<div id="add-sensor-alert" class="alert alert-success alert-dismissible fade show" role="alert">Sensor added successfuly!<button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button></div>'
+              );
+              // clearing array and form
+              deleteCategory();
+              addSensorForm.reset();
             })
-            .catch((error) => {
-              console.error("Error writing document: ", error);
+            .catch(() => {
+              console.error(
+                "Error setting sensor information in add sensor: ",
+                error
+              );
             });
         }
       })
       .catch(() => {
-        console.error("Error writing document: ", error);
+        console.error(
+          "Error fetching sensor information in add sensor: ",
+          error
+        );
       });
   }
 });
-var ctx = document.getElementById("chart").getContext("2d");
-var chartctx = {
-  type: "line",
-  data: {
-    datasets: [
-      {
-        label: "Temperature",
-        data: 0,
-        fill: false,
-      },
-    ],
-  },
-  options: {
-    responsive: true,
-    maintainAspectRatio: false,
 
-    scales: {
-      yAxes: [
-        {
-          ticks: {
-            beginAtZero: true,
-          },
-        },
-      ],
-    },
-    tooltips: {
-      mode: "index",
-      intersect: false,
-    },
-    hover: {
-      mode: "nearest",
-      intersect: true,
-    },
-  },
-};
-
-var myChart = new Chart(ctx, chartctx);
-
-function addData(data) {
-  if (data) {
-    myChart.data.labels.push(data[0].data().timestamp);
-    myChart.data.datasets.forEach((dataset) => {
-      dataset.data.push(data[0].data().temperature);
-    });
-    myChart.update();
-  }
+// add floating legend for chart
+function addLegend(
+  myChart,
+  chartAxisId,
+  classWrapperModule,
+  classWrapper2Module,
+  readLength
+) {
+  var newwidth = $("." + classWrapper2Module).width() + 100 * readLength;
+  $("." + classWrapper2Module).width(newwidth);
+  $("." + classWrapperModule).animate({
+    scrollLeft: newwidth,
+  });
+  setTimeout(function () {
+    var sourceCanvas = myChart.chart.canvas;
+    var copyWidth = myChart.scales["y-axis-0"].width + 10;
+    var copyHeight =
+      myChart.scales["y-axis-0"].height + myChart.scales["y-axis-0"].top - 10;
+    var targetCtx = document.getElementById(chartAxisId).getContext("2d");
+    targetCtx.canvas.width = copyWidth;
+    targetCtx.drawImage(
+      sourceCanvas,
+      0,
+      0,
+      copyWidth,
+      copyHeight,
+      0,
+      0,
+      copyWidth,
+      copyHeight
+    );
+  }, 350);
 }
 
+function addDragScroll(classWrapperModule) {
+  const slider = document.querySelector("." + classWrapperModule);
+  let isDown = false;
+  let startX;
+  let scrollLeft;
+
+  slider.addEventListener("mousedown", (e) => {
+    isDown = true;
+    startX = e.pageX - slider.offsetLeft;
+    scrollLeft = slider.scrollLeft;
+  });
+  slider.addEventListener("mouseleave", () => {
+    isDown = false;
+  });
+  slider.addEventListener("mouseup", () => {
+    isDown = false;
+  });
+  slider.addEventListener("mousemove", (e) => {
+    if (!isDown) return;
+    e.preventDefault();
+    const x = e.pageX - slider.offsetLeft;
+    const walk = (x - startX) * 2; //scroll-fast
+    slider.scrollLeft = scrollLeft - walk;
+  });
+}
+
+// brain of the operation, create the chart
 function createChart() {
+  console.log("Creating Chart...");
+  return new Promise((resolve) => {
+    db.collection("users")
+      .doc(userUid)
+      .collection("sensor")
+      .get()
+      .then((doc) => {
+        var newChartArray = [];
+        doc.forEach((docs) => {
+          var sensorList = docs.data().sensors;
+          var moduleName = docs.data().name;
+          var groupName = docs.data().group;
+          var moduleDesc = docs.data().desc;
+          var sensorReading = docs.data().reading;
+          var idGroup = "card-" + groupName;
+          var idModule = "wrapper-" + moduleName + "-" + groupName;
+
+          if ($("#" + idGroup).length == 0) {
+            // check if element exist or not
+            $("#chart-area").append(
+              '<div class="card mb-4 text-start"><div class="card text-start"><div class="card-body" id="' +
+                idGroup +
+                '"><h2 class="card-title">' +
+                capitalizeFirstLetter(groupName) +
+                "</h2><br></div></div></div>"
+            );
+          }
+
+          // append module card into group card
+          $("#" + idGroup).append(
+            '<div class="card-body group-wrapper mb-3" id="' +
+              idModule +
+              '"><h3 class="card-title">' +
+              capitalizeFirstLetter(moduleName) +
+              "</h3><p class='card-text'>" +
+              capitalizeFirstLetter(moduleDesc) +
+              "</p><hr /></div>"
+          );
+
+          // append sensor/s to the module card
+          for (y = 0; y < sensorList.length; y++) {
+            var sensorName = sensorList[y];
+            var classWrapperModule =
+              "chartAreaWrapper-" +
+              sensorName +
+              "-" +
+              moduleName +
+              "-" +
+              groupName;
+
+            var classWrapper2Module =
+              "chartAreaWrapper2" +
+              sensorName +
+              "-" +
+              moduleName +
+              "-" +
+              groupName;
+
+            var chartId =
+              "chart-" + sensorName + "-" + moduleName + "-" + groupName;
+
+            var chartAxisId =
+              "chartAxis-" + sensorName + "-" + moduleName + "-" + groupName;
+
+            $("#" + idModule).append(
+              '<h5 class="card-text mt-4 ">' +
+                capitalizeFirstLetter(sensorName) +
+                '</h5><div class="chartWrapper"><div class="mb-5 ' +
+                classWrapperModule +
+                ' cw"><div class="' +
+                classWrapper2Module +
+                ' cw2"><canvas class="chart" id="' +
+                chartId +
+                '"></canvas></div></div><canvas id="' +
+                chartAxisId +
+                '" height="300" width="20"></canvas></div>'
+            );
+
+            var ctx = document.getElementById(chartId).getContext("2d"),
+              gradient = ctx.createLinearGradient(0, 0, 0, 450);
+
+            // gradient.addColorStop(0.75, "rgba(92, 183, 188,0.3)");
+            gradient.addColorStop(0, "rgba(75, 215, 147,0.5)");
+            gradient.addColorStop(0.5, "rgba(250,250,250,0)");
+            var chartctx = {
+              type: "line",
+              data: {
+                datasets: [
+                  {
+                    data: 0,
+                    backgroundColor: gradient,
+                    borderWidth: 1,
+                    borderColor: "#5cb7bc",
+                  },
+                ],
+              },
+              options: {
+                responsive: true,
+                maintainAspectRatio: false,
+                legend: {
+                  display: false,
+                },
+                scales: {
+                  xAxes: [
+                    {
+                      gridLines: {
+                        color: "rgba(200, 200, 200, 0.05)",
+                        lineWidth: 1,
+                      },
+                    },
+                  ],
+                  yAxes: [
+                    {
+                      gridLines: {
+                        color: "rgba(200, 200, 200, 0.08)",
+                        lineWidth: 1,
+                      },
+                    },
+                  ],
+                },
+                elements: {
+                  line: {
+                    tension: 0.4,
+                  },
+                },
+                scales: {
+                  yAxes: [
+                    {
+                      ticks: {
+                        beginAtZero: true,
+                      },
+                    },
+                  ],
+                },
+                tooltips: {
+                  mode: "index",
+                  intersect: false,
+                },
+                hover: {
+                  mode: "nearest",
+                  intersect: true,
+                },
+              },
+            };
+
+            var myChart = new Chart(ctx, chartctx);
+            let timestampArray = sensorReading.map((a) => a.timestamp);
+            newChartArray.push({
+              id: chartId,
+              chart: myChart,
+              timestamp: timestampArray,
+            });
+            // sensorReading.sort((a, b) => a.timestamp - b.timestamp); //in case sorting is needed
+
+            sensorReading.forEach((e) => {
+              var d = new Date(e.timestamp * 1000);
+              myChart.data.labels.push(d.toLocaleDateString("en", options));
+              myChart.data.datasets.forEach((dataset) => {
+                dataset.data.push(e[sensorName]);
+              });
+            });
+
+            myChart.update();
+            addLegend(myChart, chartAxisId,classWrapperModule,classWrapper2Module,sensorReading.length);
+            addDragScroll(classWrapperModule);
+          }
+        });
+        resolve(newChartArray);
+      });
+  });
+}
+
+// update the chart
+function updateChart() {
   db.collection("users")
     .doc(userUid)
     .collection("sensor")
-    .get()
-    .then((e) => {
-      e.forEach((doc) => {});
+    .onSnapshot((snapshot) => {
+      snapshot.forEach((doc) => {
+        var sensorList = docs.data().sensors;
+        var moduleName = docs.data().name;
+        var groupName = docs.data().group;
+        var moduleDesc = docs.data().desc;
+        var sensorReading = docs.data().reading;
+        var idGroup = "card-" + groupName;
+        var idModule = "wrapper-" + moduleName + "-" + groupName;
+        console.log(sensorList + moduleName + groupName);
+      });
     });
 }
-function updateChart() {
 
-  db.collection("users").doc(userUid).get().then((userDoc)=>{
-      var sensorList = userDoc.data().sensor
-      for (i = 0;i<sensorList.length;i++){
-        var groupName = sensorList[i].name
-        $("#chart-area").append(
-          '<div class="card text-start"><div class="card text-start"><div class="card-body" id="card-'+groupName+'"><h2 class="card-title">'+groupName+'</h2></div></div></div>'
-        );
-        for(y=0;y<sensorList[i].sensor.length;y++){
-          var sensorName = sensorList[i].sensor[y]
-          $("#card"+groupName).append(
-            '<div class="card-body group-wrapper id="wrapper-'+sensorName+'""><h3 class="card-title">'+sensorName+'</h3></div>'
-          );
-          // REMEMBER TO PUT ERROR HANDLER INCASE OF NO SENSOR INPUT YET
-          db.collection("users").doc(userUid).collection("sensor").doc(groupName).collection(sensorName).get().then((doc)=>{
-            var keys = Object.keys(doc[0].data());
-            doc.forEach((docs)=>{
-              keys = Object.keys(docs.data());
-            })
-          })
-          // db.collection("users").doc(userUid).collection("sensor").doc(groupName).get().then((e)=>{
-          //   e.forEach((doc)=>{
-          //     db.collection("users")
-          //         .doc(userUid)
-          //         .collection("sensor")
-          //         .doc(doc.id).get().then((e)=>{
-          //           console.log(e)
-          //         })
-          //   });
-          // })
-      }
-      }
-  })
-  
-  
+async function chartHandler() {
+  let arrayOfChart = await createChart();
+  console.log(arrayOfChart);
+
+  db.collection("users")
+    .doc(userUid)
+    .collection("sensor")
+    .onSnapshot((snapshot) => {
+      snapshot.forEach((docs) => {
+        var sensorList = docs.data().sensors;
+        var moduleName = docs.data().name;
+        var groupName = docs.data().group;
+        var moduleDesc = docs.data().desc;
+        var sensorReading = docs.data().reading;
+        var idGroup = "card-" + groupName;
+        var idModule = "wrapper-" + moduleName + "-" + groupName;
+
+        for (y = 0; y < sensorList.length; y++) {
+          var sensorName = sensorList[y];
+          var classWrapperModule =
+          "chartAreaWrapper-" +
+          sensorName +
+          "-" +
+          moduleName +
+          "-" +
+          groupName;
+
+        var classWrapper2Module =
+          "chartAreaWrapper2" +
+          sensorName +
+          "-" +
+          moduleName +
+          "-" +
+          groupName;
+          var chartId =
+            "chart-" + sensorName + "-" + moduleName + "-" + groupName;
+
+          var chartAxisId =
+            "chartAxis-" + sensorName + "-" + moduleName + "-" + groupName;
+
+          arrayOfChart.forEach((chartInstance) => {
+            if (chartId == chartInstance.id) {
+              let latestLocalData =
+                chartInstance.timestamp[chartInstance.timestamp.length - 1];
+              if (
+                sensorReading[sensorReading.length - 1].timestamp >
+                latestLocalData
+              ) {
+                console.log(
+                  "New data added to :" +
+                    chartInstance.id +
+                    " | value :" +
+                    sensorReading[sensorReading.length - 1][sensorName]
+                );
+                var d = new Date(
+                  sensorReading[sensorReading.length - 1].timestamp * 1000
+                );
+                chartInstance.chart.data.labels.push(
+                  d.toLocaleDateString("en", options)
+                );
+                chartInstance.chart.data.datasets.forEach((dataset) => {
+                  dataset.data.push(
+                    sensorReading[sensorReading.length - 1][sensorName]
+                  );
+                });
+              }
+              chartInstance.chart.update();
+              addLegend(chartInstance.chart, chartAxisId,classWrapperModule,classWrapper2Module, sensorReading.length);
+            }
+          });
+        }
+      });
+    });
 }
-
-// db.collection("users")
-// .doc(userUid)
-// .collection("sensor")
-// .doc(doc.id)
-// .collection("sensor1")
-// .get()
-// .then((e) => {
-//   e.forEach((doc) => {
-//     console.log(doc.data().timestamp);
-//     if (doc.id != "info") {
-//       var options = {
-//         weekday: "short",
-//         hour: "numeric",
-//         minute: "numeric",
-//       };
-//       var d = new Date(doc.data().timestamp * 1000);
-//       myChart.data.labels.push(d.toLocaleDateString("en", options));
-//       myChart.data.datasets.forEach((dataset) => {
-//         dataset.data.push(doc.data().temperature);
-//       });
-//     }
-//   });
-  
-//   var newwidth = $(".chartAreaWrapper2").width() + 100 * e.docs.length;
-//   $(".chartAreaWrapper2").width(newwidth);
-//   $(".chartAreaWrapper").animate({
-//     scrollLeft: newwidth,
-//   });
-
-//   myChart.update();
-//   setTimeout(function () {
-//     var sourceCanvas = myChart.chart.canvas;
-//     var copyWidth = myChart.scales['y-axis-0'].width + 10 ;
-//     var copyHeight = myChart.scales['y-axis-0'].height + myChart.scales['y-axis-0'].top - 10;
-//     var targetCtx = document.getElementById("myChartAxis").getContext("2d");
-//     targetCtx.canvas.width = copyWidth;
-//     targetCtx.drawImage(sourceCanvas, 0, 0, copyWidth, copyHeight, 0, 0, copyWidth, copyHeight);
-//   }, 350);
-
-
-
-// })
-// .catch((error) => {
-//   console.log(error);
-// });
-// });
 window.onload = function () {
   auth.onAuthStateChanged((user) => {
     if (user) {
       isLoggedIn = true;
       console.log("user logged in: ", user);
       userUid = auth.currentUser.uid;
-      createChart();
-      updateChart();
+
       getWelcomeMessage();
+      chartHandler();
     } else {
       console.log("user logged out");
       userUid = null;
@@ -396,107 +573,3 @@ window.onload = function () {
     }
   });
 };
-
-// $(".chart-area").append(
-//   '<div class="card mb-3"><div class="card-body chart"> <canvas class="canvas" id="canvas' +
-//     doc.id +
-//     '"></canvas></div></div>'
-// );
-
-// --------------------
-// var chart = new Chart(document.getElementById("canvas"+doc.id), {
-//   type: "line",
-//   data: {
-//     datasets: [
-//       {
-//         label: "Temperature",
-//         data: 0,
-//         fill: false,
-//       },
-//     ],
-//   },
-//   options: {
-//     responsive: true,
-//     maintainAspectRatio: false,
-//     scales: {
-//       yAxes: [
-//         {
-//           ticks: {
-//             beginAtZero: true,
-//           },
-//         },
-//       ],
-//     },
-//     title: {
-//       display: true,
-//       text: doc.id + " " + doc.data().nickname==null?doc.data().nickname:"",
-//     },
-//     tooltips: {
-//       mode: "index",
-//       intersect: false,
-//     },
-//     hover: {
-//       mode: "nearest",
-//       intersect: true,
-//     },
-//   },
-// });
-// -----------------------------------------------------------------------
-// function parseModule(sensorData) {
-//   sensorData.forEach((docs) => {
-//     sensor.push(docs.data());
-//   });
-//   console.log(typeof sensor);
-
-//   config = {
-//     type: "line",
-//     data: {
-//       // labels: ["January", "February", "March", "April", "May", "June", "July"],
-//       datasets: [
-//         {
-//           data: [{ timestamp: "Sales", temperature: 1500 }],
-//         },
-//       ],
-//     },
-//     options: {
-//       parsing: {
-//         xAxisKey: "timestamp",
-//         yAxisKey: "temperature",
-//       },
-//       responsive: true,
-//       title: {
-//         display: true,
-//         text: "Chart.js Line Chart",
-//       },
-//       tooltips: {
-//         mode: "index",
-//         intersect: false,
-//       },
-//       hover: {
-//         mode: "nearest",
-//         intersect: true,
-//       },
-//       scales: {
-//         xAxes: [
-//           {
-//             display: true,
-//             scaleLabel: {
-//               display: true,
-//               labelString: "Month",
-//             },
-//           },
-//         ],
-//         yAxes: [
-//           {
-//             display: true,
-//             scaleLabel: {
-//               display: true,
-//               labelString: "Value",
-//             },
-//           },
-//         ],
-//       },
-//     },
-//   };
-
-// }

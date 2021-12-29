@@ -11797,6 +11797,7 @@ textarea.form-control-lg {
   }
 }
 canvas {
+  margin-top: 20px;
   -moz-user-select: none;
   -webkit-user-select: none;
   -ms-user-select: none;
@@ -11816,13 +11817,15 @@ canvas {
   pointer-events: none;
 }
 
-.chartAreaWrapper {
+.cw {
+  cursor: grab;
   overflow-x: scroll;
+  overflow-y: hidden;
   position: relative;
   width: 100%;
 }
 
-.chartAreaWrapper2 {
+.cw2 {
   position: relative;
   height: 300px;
 }
@@ -11984,6 +11987,10 @@ canvas {
 .logo-medium {
   margin-left: 20px;
   width: 15vw;
+}
+
+.text-module-button {
+  color: #fff;
 }
 
 .shadow-toolbar {

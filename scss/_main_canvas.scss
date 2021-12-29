@@ -1,6 +1,7 @@
 @use 'custom' as *;
 
 canvas{
+    margin-top: 20px;
     -moz-user-select: none;
     -webkit-user-select: none;
     -ms-user-select: none;
@@ -18,13 +19,15 @@ canvas{
     top: 0;
     pointer-events:none;
 }
-.chartAreaWrapper {
+.cw {
+    cursor: grab;
     overflow-x: scroll;
+    overflow-y: hidden;
     position: relative;
     width: 100%;
 }
 
-.chartAreaWrapper2 {
+.cw2 {
     position: relative;
     height: 300px;
 }

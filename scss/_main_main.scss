@@ -135,6 +135,7 @@
     padding-bottom: 0.1rem;
   }
 }
+
 .body-main {
   background: $gray-400;
 }
@@ -144,6 +145,11 @@
 .logo-medium {
   margin-left: 20px;
   width: 15vw;
+}
+
+
+.text-module-button{
+  color: $white;
 }
 
 .shadow-toolbar{
