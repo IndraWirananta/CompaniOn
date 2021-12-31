@@ -25,11 +25,6 @@ logout.addEventListener("click", (e) => {
   });
 });
 
-//capitalize first letter
-function capitalizeFirstLetter(string) {
-  return string.charAt(0).toUpperCase() + string.slice(1);
-}
-
 //change toolbar shadow
 function changeShadow() {
   if (
@@ -198,7 +193,7 @@ addSensorForm.addEventListener("submit", (e) => {
             .collection("sensor")
             .doc(name)
             .set({
-              nickname: name,
+              nick: null,
               desc: desc,
               group: group,
               sensors: arrCategory,
@@ -213,9 +208,7 @@ addSensorForm.addEventListener("submit", (e) => {
               // clearing array and form
               deleteCategory();
               addSensorForm.reset();
-              $("#chart-area").empty();
-              chartHandler();
-
+              updateChart();
             })
             .catch(() => {
               console.error(
@@ -234,6 +227,56 @@ addSensorForm.addEventListener("submit", (e) => {
   }
 });
 
+// for editing group name
+function editGroupName(groupName, newGroupName, idGroupModal) {
+  db.collection("users")
+    .doc(userUid)
+    .collection("sensor")
+    .get()
+    .then((e) => {
+      e.forEach((docs) => {
+        if (docs.data().group == groupName) {
+          db.collection("users")
+            .doc(userUid)
+            .collection("sensor")
+            .doc(docs.id)
+            .update({
+              group: newGroupName.replace(/ /g, "_"),
+            });
+        }
+      });
+      $("#" + idGroupModal).modal("hide");
+      updateChart();
+    });
+}
+
+// for editing module nickname
+function editModuleNickname(moduleName, newNickname, idModuleModal) {
+  if(newNickname==""){
+    db.collection("users")
+      .doc(userUid)
+      .collection("sensor")
+      .doc(moduleName)
+      .update({
+        nick: null,
+      }).then(()=>{
+        $("#" + idModuleModal).modal("hide");
+        updateChart();
+      })
+  }else{
+    db.collection("users")
+      .doc(userUid)
+      .collection("sensor")
+      .doc(moduleName)
+      .update({
+        nick: newNickname.replace(/ /g, "_"),
+      }).then(()=>{
+        $("#" + idModuleModal).modal("hide");
+        updateChart();
+      })
+  }
+}
+
 // add floating legend for chart
 function addLegend(
   myChart,
@@ -247,7 +290,7 @@ function addLegend(
   $("." + classWrapperModule).animate({
     scrollLeft: newwidth,
   });
-  setTimeout(function () {
+ 
     var sourceCanvas = myChart.chart.canvas;
     var copyWidth = myChart.scales["y-axis-0"].width + 10;
     var copyHeight =
@@ -265,7 +308,6 @@ function addLegend(
       copyWidth,
       copyHeight
     );
-  }, 350);
 }
 
 function addDragScroll(classWrapperModule) {
@@ -307,21 +349,63 @@ function createChart() {
         doc.forEach((docs) => {
           var sensorList = docs.data().sensors;
           var moduleName = docs.id;
-          var nickname = docs.data().nickname;
+          var nickname = docs.data().nick;
           var groupName = docs.data().group;
           var moduleDesc = docs.data().desc;
           var sensorReading = docs.data().reading;
           var idGroup = "card-" + groupName;
+          var idGroupModal = "modal-" + groupName;
+          var idGroupForm = "form-" + groupName;
           var idModule = "wrapper-" + moduleName + "-" + groupName;
+          var idModuleModal = "modal-" + moduleName + "-" + groupName;
+          var idModuleForm = "form-" + moduleName + "-" + groupName;
+          var idNickname = "nick-" + moduleName + "-" + groupName;
 
           if ($("#" + idGroup).length == 0) {
             // check if element exist or not
+            $("#modal-area").append(
+              '<div class="modal fade" id=' +
+                idGroupModal +
+                ">" +
+                '<div class="modal-dialog modal-dialog-centered">' +
+                '<form class="modal-content" id="' +
+                idGroupForm +
+                '">' +
+                '<div class="modal-header text-center">' +
+                '<h4 class="modal-title text-center w-100 font-weight-bold">Edit Group</h4>' +
+                "</div>" +
+                '<div class="modal-body  mx-3">' +
+                '<div class="md-form mb-3">' +
+                '<label data-error="wrong" class=" mb-3" data-success="right">Change Group Name</label>' +
+                '<input type="text" id="group_field" class="form-control validate" value="' +
+                groupName +
+                '">' +
+                "</div>" +
+                "</div>" +
+                '<button type="submit" class="btn btn-primary btn-signup"' +
+                ')">Submit</button>' +
+                "</form>" +
+                "</div>" +
+                "</div>"
+            );
+            let groupNameModalform = document.getElementById(idGroupForm);
+            groupNameModalform.addEventListener("submit", (e) => {
+              e.preventDefault();
+              editGroupName(
+                groupName,
+                groupNameModalform.group_field.value,
+                idGroupModal
+              );
+            });
+
             $("#chart-area").append(
               '<div class="card mb-4 text-start"><div class="card text-start"><div class="card-body" id="' +
                 idGroup +
-                '"><h2 class="card-title">' +
-                capitalizeFirstLetter(groupName) +
-                "</h2><br></div></div></div>"
+                '"><div class="group-name"><h2 class="card-title">' +
+                groupName +
+                '</h2> <button type="button" data-bs-toggle="modal"  class="btn btn-edit" data-bs-target="#' +
+                idGroupModal +
+                '"><i class="bx bx-sm bx-edit"></i></button></i></div><br></div></div></div>'
             );
           }
 
@@ -329,11 +413,66 @@ function createChart() {
           $("#" + idGroup).append(
             '<div class="card-body group-wrapper mb-3" id="' +
               idModule +
+              '"><div class="module-name" id="' +
+              idNickname +
               '"><h3 class="card-title">' +
-              capitalizeFirstLetter(moduleName) +
-              "</h3><p class='card-text'>" +
-              capitalizeFirstLetter(moduleDesc) +
+              moduleName +
+              "</h3> </div><p class='card-text'>" +
+              moduleDesc +
               "</p><hr /></div>"
+          );
+            var displayValueNickname = "";
+          if (nickname!=null){
+            displayValueNickname = nickname;
+          }
+          $("#modal-area").append(
+            '<div class="modal fade" id=' +
+              idModuleModal +
+              ">" +
+              '<div class="modal-dialog modal-dialog-centered">' +
+              '<form class="modal-content" id="' +
+              idModuleForm +
+              '">' +
+              '<div class="modal-header text-center">' +
+              '<h4 class="modal-title text-center w-100 font-weight-bold">Edit Module</h4>' +
+              "</div>" +
+              '<div class="modal-body  mx-3">' +
+              '<div class="md-form mb-3">' +
+              '<label data-error="wrong" class=" mb-3" data-success="right">Give module a nickname</label>' +
+              '<input type="text" id="nickname_field" class="form-control validate" value="' +
+              displayValueNickname +
+              '">' +
+              "</div>" +
+              "</div>" +
+              '<button type="submit" class="btn btn-primary btn-signup"' +
+              ')">Submit</button>' +
+              "</form>" +
+              "</div>" +
+              "</div>"
+          );
+
+          let groupNameModalform = document.getElementById(idModuleForm);
+          groupNameModalform.addEventListener("submit", (e) => {
+            e.preventDefault();
+            editModuleNickname(
+              moduleName,
+              groupNameModalform.nickname_field.value,
+              idModuleModal
+            );
+          });
+
+          if (nickname != null) {
+            $("#" + idNickname).append(
+              "<div class='vr-module'>" +
+                "</div><p class='module-nickname'>" +
+                nickname +
+                "</p>"
+            );
+          }
+          $("#" + idNickname).append(
+            '<button type="button" data-bs-toggle="modal" class="btn btn-edit" data-bs-target="#' +
+              idModuleModal +
+              '"><i class="bx bx-edit-alt bx-sm"></i></button>'
           );
 
           // append sensor/s to the module card
@@ -363,7 +502,7 @@ function createChart() {
 
             $("#" + idModule).append(
               '<h5 class="card-text mt-4 ">' +
-                capitalizeFirstLetter(sensorName) +
+                sensorName +
                 '</h5><div class="chartWrapper"><div class="mb-5 ' +
                 classWrapperModule +
                 ' cw"><div class="' +
@@ -476,36 +615,29 @@ function createChart() {
 }
 
 // update the chart
-// function updateChart() {
-//   db.collection("users")
-//     .doc(userUid)
-//     .collection("sensor")
-//     .onSnapshot((snapshot) => {
-//       snapshot.forEach((doc) => {
-//         var sensorList = docs.data().sensors;
-//         var moduleName = docs.data().name;
-//         var groupName = docs.data().group;
-//         var moduleDesc = docs.data().desc;
-//         var sensorReading = docs.data().reading;
-//         var idGroup = "card-" + groupName;
-//         var idModule = "wrapper-" + moduleName + "-" + groupName;
-//         console.log(sensorList + moduleName + groupName);
-//       });
-//     });
-// }
+function updateChart() {
+  $("#chart-area").empty();
+  chartHandler();
+}
 
 async function chartHandler() {
   let arrayOfChart = await createChart();
+  try {
+    unsubscribe();
+  } catch (err) {
+    console.log("unsubscribe has not been set yet");
+  }
   console.log(arrayOfChart);
-
-  unsubscribe = db.collection("users")
+  unsubscribe = db
+    .collection("users")
     .doc(userUid)
     .collection("sensor")
     .onSnapshot((snapshot) => {
-      console.log("listener is called")
-      snapshot.forEach((docs) => {  
+      console.log("listener is called");
+      snapshot.forEach((docs) => {
         var sensorList = docs.data().sensors;
         var moduleName = docs.id;
+        var nickname = docs.data().nick;
         var groupName = docs.data().group;
         var moduleDesc = docs.data().desc;
         var sensorReading = docs.data().reading;
@@ -586,7 +718,6 @@ window.onload = function () {
       isLoggedIn = true;
       console.log("user logged in: ", user);
       userUid = auth.currentUser.uid;
-
       getWelcomeMessage();
       chartHandler();
     } else {
