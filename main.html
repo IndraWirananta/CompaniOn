@@ -22,7 +22,7 @@
         <ul class="nav-links">
             <li id="burger">
                 <a>
-                    <i class="burger_icon bx bxs-chevron-right" id="burger_icon"></i>
+                    <i class="burger-icon bx bxs-chevron-right" id="burger-icon"></i>
                     <span class="link_name">Companion</span>
                 </a>
             </li>
@@ -38,84 +38,21 @@
                 </ul>
             </li>
             <li>
-                <div class="icon-link">
-                    <a>
-                        <i class="bx bx-collection"></i>
-                        <span class="link_name">Category</span>
-                    </a>
-                    <i class="bx bxs-chevron-down arrow"></i>
-                </div>
-                <ul class="sub-menu">
-                    <li><a class="link_name">Category</a></li>
-                    <li><a>HTML & CSS</a></li>
-                    <li><a>JavaScript</a></li>
-                    <li><a>PHP & MySQL</a></li>
-                </ul>
-            </li>
-            <li>
-                <div class="icon-link">
-                    <a>
-                        <i class="bx bx-book-alt"></i>
-                        <span class="link_name">Posts</span>
-                    </a>
-                    <i class="bx bxs-chevron-down arrow"></i>
-                </div>
-                <ul class="sub-menu">
-                    <li><a class="link_name">Posts</a></li>
-                    <li><a>Web Design</a></li>
-                    <li><a>Login Form</a></li>
-                    <li><a>Card Design</a></li>
+                <a>
+                    <i class='bx bxs-book-content'></i>
+                    <span class="link_name">Guide</span>
+                </a>
+                <ul class="sub-menu blank">
+                    <li><a class="link_name">Guide</a></li>
                 </ul>
             </li>
             <li>
                 <a>
-                    <i class="bx bx-pie-chart-alt-2"></i>
-                    <span class="link_name">Analytics</span>
+                    <i class='bx bx-help-circle'></i>
+                    <span class="link_name">Help</span>
                 </a>
                 <ul class="sub-menu blank">
-                    <li><a class="link_name">Analytics</a></li>
-                </ul>
-            </li>
-            <li>
-                <a>
-                    <i class="bx bx-line-chart"></i>
-                    <span class="link_name">Chart</span>
-                </a>
-                <ul class="sub-menu blank">
-                    <li><a class="link_name">Chart</a></li>
-                </ul>
-            </li>
-            <li>
-                <div class="icon-link">
-                    <a>
-                        <i class="bx bx-plug"></i>
-                        <span class="link_name">Plugins</span>
-                    </a>
-                    <i class="bx bxs-chevron-down arrow"></i>
-                </div>
-                <ul class="sub-menu">
-                    <li><a class="link_name">Plugins</a></li>
-                    <li><a>UI Face</a></li>
-                    <li><a>Pigments</a></li>
-                    <li><a>Box Icons</a></li>
-                </ul>
-            </li>
-            <li>
-                <a>
-                    <i class="bx bx-compass"></i>
-                    <span class="link_name">Explore</span>
-                </a>
-                <ul class="sub-menu blank">
-                    <li><a class="link_name">Explore</a></li>
-                </ul>
-            </li>
-            <li>
-                <a>
-                    <i class="bx bx-history"></i>
-                    <span class="link_name">History</span>
-                </a>
-                <ul class="sub-menu blank">
-                    <li><a class="link_name">History</a></li>
+                    <li><a class="link_name">Help</a></li>
                 </ul>
             </li>
             <li>
@@ -207,18 +144,6 @@
                                     </div>
                                 </div>
                             </div>
-
-                            <!-- <div class="md-form mb-2">
-                                <i class="fas fa-envelope prefix grey-text"></i>
-                                <label data-error="wrong" data-success="right">Email</label>
-                                <input type="email" id="email_field_signin" class="form-control validate" />
-                            </div>
-
-                            <div class="md-form mb-2">
-                                <i class="fas fa-lock prefix grey-text"></i>
-                                <label data-error="wrong" data-success="right">Password</label>
-                                <input type="password" id="password_field_signin" class="form-control validate" />
-                            </div> -->
                         </div>
                         <button class="btn btn-primary btn-signup text-module-button" type="submit">
                             Add Module
@@ -229,67 +154,9 @@
         </div>
 
         <!-- CHART AREA -->
+        <div style="height: 100px"></div>
         <div class="chart-area" id="chart-area">
-            <div style="height: 100px"></div>
-            <!-- <div class="card mb-3">
-          <div class="card-body chart">
-            <canvas class="canvas" id="canvas"></canvas>
-          </div>
-        </div> -->
-            <!-- <div class="card text-start">
-                <div class="card text-start">
-                    <div class="card-body">
-                        <h2 class="card-title">Kandang</h2>
-                        <p class="card-text">5 Sensor</p>
-                        <div class="card-body group-wrapper">
-                            <h3 class="card-title">Sensor1</h3>
-                            <h5 class="card-text mt-5">Temperature</h5>
-                            <p class="card-text">
-                                This is the only currently working sensor
-                            </p>
-                            <div class="chartWrapper">
-                                <div class="chartAreaWrapper">
-                                    <div class="chartAreaWrapper2">
-                                        <canvas class="chart" id="chart"></canvas>
-                                    </div>
-                                </div>
-                                <canvas id="myChartAxis" height="300" width="20"></canvas>
-                            </div>
-                            <h5 class="card-text mt-5">Temperature</h5>
-                            <p class="card-text">
-                                This is the only currently working sensor
-                            </p>
-                            <div class="chartWrapper">
-                                <div class="chartAreaWrapper">
-                                    <div class="chartAreaWrapper2">
-                                        <canvas class="chart" id="chart2"></canvas>
-                                    </div>
-                                </div>
-                                <canvas id="myChartAxis" height="300" width="20"></canvas>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-            </div> -->
-            <!-- <div class="card-body group-wrapper">
-            <h3 class="card-title">Sensor1</h3>
-            
-        </div> -->
-            <!-- <div class="card text-start">
-                <div class="card text-start">
-                    <div class="card-body">
-                        <h2 class="card-title">Kandang</h2>
-                        
-                    </div>
-                </div>
-            </div> -->
 
-            <!-- <div class="card mb-3">
-                <div class="card-body">
-                    <h4 class="card-title">Title</h4>
-                    <p class="card-text">Body</p>
-                </div>
-            </div> -->
         </div>
     </section>
     <a href="#" class="shadow btn-primary rounded-circle back-to-top">
@@ -302,7 +169,6 @@
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
     <script src="/assets/js/bootstrap.bundle.js"></script>
     <script src="https://www.chartjs.org/dist/2.6.0/Chart.bundle.js"></script>
-    <!-- <script src="https://www.chartjs.org/samples/2.6.0/utils.js"></script> -->
     <script src="/js/firebase.js"></script>
     <script src="/js/sidebar.js"></script>
     <script src="/js/loading_screen.js"></script>

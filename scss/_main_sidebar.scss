@@ -6,7 +6,7 @@
   left: 0;
   height: 100%;
   width: 260px;
-  background: #11101d;
+  background: $gray-900;
   z-index: 100;
   transition: all 0.5s ease;
 }
@@ -30,36 +30,25 @@
   transition: all 0.4s ease;
 }
 .sidebar .nav-links li:hover{
-  background: #1d1b31;
+  background: $gray-800;
 }
-.sidebar .nav-links li .icon-link{
-  display: flex;
-  align-items: center;
-  justify-content: space-between;
-}
-// .sidebar.close .nav-links li .icon-link{
-//   display: block
-// }
 .sidebar .nav-links li i{
   height: 50px;
   min-width: 78px;
   text-align: center;
   line-height: 50px;
-  color: #fff;
+  color: $white;
   font-size: 20px;
   cursor: pointer;
   transition: all 0.3s ease;
 }
-#burger{
+.sidebar .nav-links #burger{
   margin-bottom: 50px !important;
 }
-
-.sidebar .nav-links li.showMenu i.arrow{
+.sidebar .nav-links #burger .arrow{
   transform: rotate(-180deg);
 }
-.sidebar.close .nav-links i.arrow{
-  display: none;
-}
+
 .sidebar .nav-links li a{
   display: flex;
   align-items: center;
@@ -68,7 +57,7 @@
 .sidebar .nav-links li a .link_name{
   font-size: 18px;
   font-weight: 400;
-  color: #fff;
+  color: $white;
   transition: all 0.4s ease;
 }
 .sidebar.close .nav-links li a .link_name{
@@ -78,14 +67,14 @@
 .sidebar .nav-links li .sub-menu{
   padding: 6px 6px 14px 80px;
   margin-top: -10px;
-  background: #1d1b31;
+  background: $gray-800;
   display: none;
 }
 .sidebar .nav-links li.showMenu .sub-menu{
   display: block;
 }
 .sidebar .nav-links li .sub-menu a{
-  color: #fff;
+  color: $white;
   font-size: 15px;
   padding: 5px 0;
   white-space: nowrap;

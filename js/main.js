@@ -6,6 +6,7 @@ update chart-> sort by latest timestamp -> add to chart -> profit
 
 var isLoggedIn = false;
 var userUid;
+var unsubscribe;
 
 //option for chart date format
 var options = {
@@ -197,7 +198,7 @@ addSensorForm.addEventListener("submit", (e) => {
             .collection("sensor")
             .doc(name)
             .set({
-              name: name,
+              nickname: name,
               desc: desc,
               group: group,
               sensors: arrCategory,
@@ -212,6 +213,9 @@ addSensorForm.addEventListener("submit", (e) => {
               // clearing array and form
               deleteCategory();
               addSensorForm.reset();
+              $("#chart-area").empty();
+              chartHandler();
+
             })
             .catch(() => {
               console.error(
@@ -302,7 +306,8 @@ function createChart() {
         var newChartArray = [];
         doc.forEach((docs) => {
           var sensorList = docs.data().sensors;
-          var moduleName = docs.data().name;
+          var moduleName = docs.id;
+          var nickname = docs.data().nickname;
           var groupName = docs.data().group;
           var moduleDesc = docs.data().desc;
           var sensorReading = docs.data().reading;
@@ -455,7 +460,13 @@ function createChart() {
             });
 
             myChart.update();
-            addLegend(myChart, chartAxisId,classWrapperModule,classWrapper2Module,sensorReading.length);
+            addLegend(
+              myChart,
+              chartAxisId,
+              classWrapperModule,
+              classWrapper2Module,
+              sensorReading.length
+            );
             addDragScroll(classWrapperModule);
           }
         });
@@ -465,94 +476,106 @@ function createChart() {
 }
 
 // update the chart
-function updateChart() {
-  db.collection("users")
-    .doc(userUid)
-    .collection("sensor")
-    .onSnapshot((snapshot) => {
-      snapshot.forEach((doc) => {
-        var sensorList = docs.data().sensors;
-        var moduleName = docs.data().name;
-        var groupName = docs.data().group;
-        var moduleDesc = docs.data().desc;
-        var sensorReading = docs.data().reading;
-        var idGroup = "card-" + groupName;
-        var idModule = "wrapper-" + moduleName + "-" + groupName;
-        console.log(sensorList + moduleName + groupName);
-      });
-    });
-}
+// function updateChart() {
+//   db.collection("users")
+//     .doc(userUid)
+//     .collection("sensor")
+//     .onSnapshot((snapshot) => {
+//       snapshot.forEach((doc) => {
+//         var sensorList = docs.data().sensors;
+//         var moduleName = docs.data().name;
+//         var groupName = docs.data().group;
+//         var moduleDesc = docs.data().desc;
+//         var sensorReading = docs.data().reading;
+//         var idGroup = "card-" + groupName;
+//         var idModule = "wrapper-" + moduleName + "-" + groupName;
+//         console.log(sensorList + moduleName + groupName);
+//       });
+//     });
+// }
 
 async function chartHandler() {
   let arrayOfChart = await createChart();
   console.log(arrayOfChart);
 
-  db.collection("users")
+  unsubscribe = db.collection("users")
     .doc(userUid)
     .collection("sensor")
     .onSnapshot((snapshot) => {
-      snapshot.forEach((docs) => {
+      console.log("listener is called")
+      snapshot.forEach((docs) => {  
         var sensorList = docs.data().sensors;
-        var moduleName = docs.data().name;
+        var moduleName = docs.id;
         var groupName = docs.data().group;
         var moduleDesc = docs.data().desc;
         var sensorReading = docs.data().reading;
         var idGroup = "card-" + groupName;
         var idModule = "wrapper-" + moduleName + "-" + groupName;
 
-        for (y = 0; y < sensorList.length; y++) {
-          var sensorName = sensorList[y];
-          var classWrapperModule =
-          "chartAreaWrapper-" +
-          sensorName +
-          "-" +
-          moduleName +
-          "-" +
-          groupName;
+        if (sensorReading.length != 0) {
+          for (y = 0; y < sensorList.length; y++) {
+            var sensorName = sensorList[y];
+            var classWrapperModule =
+              "chartAreaWrapper-" +
+              sensorName +
+              "-" +
+              moduleName +
+              "-" +
+              groupName;
 
-        var classWrapper2Module =
-          "chartAreaWrapper2" +
-          sensorName +
-          "-" +
-          moduleName +
-          "-" +
-          groupName;
-          var chartId =
-            "chart-" + sensorName + "-" + moduleName + "-" + groupName;
+            var classWrapper2Module =
+              "chartAreaWrapper2" +
+              sensorName +
+              "-" +
+              moduleName +
+              "-" +
+              groupName;
+            var chartId =
+              "chart-" + sensorName + "-" + moduleName + "-" + groupName;
 
-          var chartAxisId =
-            "chartAxis-" + sensorName + "-" + moduleName + "-" + groupName;
+            var chartAxisId =
+              "chartAxis-" + sensorName + "-" + moduleName + "-" + groupName;
 
-          arrayOfChart.forEach((chartInstance) => {
-            if (chartId == chartInstance.id) {
-              let latestLocalData =
-                chartInstance.timestamp[chartInstance.timestamp.length - 1];
-              if (
-                sensorReading[sensorReading.length - 1].timestamp >
-                latestLocalData
-              ) {
-                console.log(
-                  "New data added to :" +
-                    chartInstance.id +
-                    " | value :" +
-                    sensorReading[sensorReading.length - 1][sensorName]
-                );
-                var d = new Date(
-                  sensorReading[sensorReading.length - 1].timestamp * 1000
-                );
-                chartInstance.chart.data.labels.push(
-                  d.toLocaleDateString("en", options)
-                );
-                chartInstance.chart.data.datasets.forEach((dataset) => {
-                  dataset.data.push(
-                    sensorReading[sensorReading.length - 1][sensorName]
+            arrayOfChart.forEach((chartInstance) => {
+              if (chartId == chartInstance.id) {
+                isFound = true;
+                let latestLocalData =
+                  chartInstance.timestamp[chartInstance.timestamp.length - 1];
+                if (
+                  sensorReading[sensorReading.length - 1].timestamp >
+                  latestLocalData
+                ) {
+                  console.log(
+                    "New data added to :" +
+                      chartInstance.id +
+                      " | value :" +
+                      sensorReading[sensorReading.length - 1][sensorName]
                   );
-                });
+                  var d = new Date(
+                    sensorReading[sensorReading.length - 1].timestamp * 1000
+                  );
+                  chartInstance.chart.data.labels.push(
+                    d.toLocaleDateString("en", options)
+                  );
+                  chartInstance.chart.data.datasets.forEach((dataset) => {
+                    dataset.data.push(
+                      sensorReading[sensorReading.length - 1][sensorName]
+                    );
+                  });
+                }
+                chartInstance.chart.update();
+                addLegend(
+                  chartInstance.chart,
+                  chartAxisId,
+                  classWrapperModule,
+                  classWrapper2Module,
+                  sensorReading.length
+                );
               }
-              chartInstance.chart.update();
-              addLegend(chartInstance.chart, chartAxisId,classWrapperModule,classWrapper2Module, sensorReading.length);
-            }
-          });
+            });
+          }
+        } else {
+          console.log("Still no sensor read");
         }
       });
     });

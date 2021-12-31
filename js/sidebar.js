@@ -5,14 +5,12 @@ for (var i = 0; i < arrow.length; i++) {
         arrowParent.classList.toggle("showMenu");
     });
 }
-let burger = document.querySelector(".burger_icon");
+let burger = document.querySelector(".burger-icon");
 burger.addEventListener("click", () => {
-    if (burger.classList.contains('bxs-chevron-right')) {
-        burger.classList.add('bxs-chevron-left');
-        burger.classList.remove('bxs-chevron-right');
+    if (burger.classList.contains('arrow')) {
+        burger.classList.remove('arrow');
     } else {
-        burger.classList.add('bxs-chevron-right');
-        burger.classList.remove('bxs-chevron-left');
+        burger.classList.add('arrow');
     }
 });
 
