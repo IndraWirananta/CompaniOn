@@ -1,0 +1,292 @@
+<!DOCTYPE html>
+<html lang="en" dir="ltr">
+
+<head>
+    <meta charset="UTF-8" />
+    <title>CompaniOn</title>
+    <link rel="stylesheet" href="assets/css/style.css" />
+    <link rel="stylesheet" href="assets/css/fontawesome.css" />
+    <link href="https://unpkg.com/boxicons@2.0.7/css/boxicons.min.css" rel="stylesheet" />
+    <link rel="icon" type="image/png" href="assets/images/favicon-32x32.png" sizes="32x32" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+</head>
+
+<body class="body-main">
+    <!-- load screen -->
+    <div class="loader-wrapper">
+        <span class="loader"><span class="loader-inner"></span></span>
+    </div>
+
+    <!-- actual page -->
+    <div class="sidebar close">
+        <ul class="nav-links">
+            <li id="burger">
+                <a>
+                    <i class="burger-icon bx bxs-chevron-right" id="burger-icon"></i>
+                    <span class="link_name">Companion</span>
+                </a>
+            </li>
+            <li>
+                <a>
+                    <i class="bx bx-grid-alt" onclick="window.location.href='./index.html'"></i>
+                    <span class="link_name" onclick="window.location.href='./index.html'">Dashboard</span>
+                </a>
+                <ul class="sub-menu blank">
+                    <li>
+                        <a class="link_name" onclick="window.location.href='./index.html'">Dashboard</a>
+                    </li>
+                </ul>
+            </li>
+            <li>
+                <a>
+                    <i class='bx bxs-bar-chart-square' onclick="window.location.href='./main.html'"></i>
+                    <span class="link_name" onclick="window.location.href='./main.html'">Apps</span>
+                </a>
+                <ul class="sub-menu blank">
+                    <li>
+                        <a class="link_name" onclick="window.location.href='./main.html'">Apps</a>
+                    </li>
+                </ul>
+            </li>
+            <li>
+                <a>
+                    <i class='bx bxs-book-content' onclick="window.location.href='./guide.html'"></i>
+                    <span class="link_name" onclick="window.location.href='./guide.html'">Guide</span>
+                </a>
+                <ul class="sub-menu blank">
+                    <li><a class="link_name" onclick="window.location.href='./guide.html'">Guide</a></li>
+                </ul>
+            </li>
+            <li>
+                <a>
+                    <i class='bx bx-help-circle' onclick="window.location.href='./help.html'"></i>
+                    <span class="link_name" onclick="window.location.href='./help.html'">Help</span>
+                </a>
+                <ul class="sub-menu blank">
+                    <li><a class="link_name" onclick="window.location.href='./help.html'">Help</a></li>
+                </ul>
+            </li>
+            <li>
+                <a>
+                    <i class="bx bx-cog" onclick="window.location.href='./setting.html'"></i>
+                    <span class="link_name" onclick="window.location.href='./setting.html'">Setting</span>
+                </a>
+                <ul class="sub-menu blank">
+                    <li><a class="link_name" onclick="window.location.href='./setting.html'">Setting</a></li>
+                </ul>
+            </li>
+        </ul>
+    </div>
+    <!-- REAL DISPLAY SECTION -->
+    <section class="real-display">
+        <div class="appbar-main shadow-sm">
+            <div class="appbar-header">
+                <div class="hstack gap-3">
+                    <a class="navbar-brand">
+                        <img class="logo-medium" src="assets/images/companion.PNG" alt="CompaniOn" />
+                    </a>
+                    <div class="vr"></div>
+                    <div class="user-welcome-message align-middle">
+                        <p id="welcome-message">Welcome Message</p>
+                    </div>
+                    <button id="logout" type="button" class="rounded-pill logout-button ms-auto">
+                        <span>Log out<i class="bx bx-log-out logout-icon"></i> </span>
+                    </button>
+                </div>
+            </div>
+        </div>
+
+        <div style="height: 60px"></div>
+        <div class="user-setting p-4">
+            <div class="card ">
+                <div class="card-body">
+                    <div class="row text-center">
+                        <h2 class=" fw-bold text-uppercase">Setting up your CompaniOn module!</h2>
+
+                    </div>
+                    <p class="card-text mt-3 mb-3">The following snippets is what your arduino code will look like! All
+                        you need
+                        to do is set it up a bit. <b>Only edit the red part</b> of the code to
+                        match your arduino module sensor.</p>
+                    <hr>
+                    <p class="card-text mt-4 mb-4">This part of the code is for defining variable used for connecting
+                        the module and the database, this is also where you
+                        can define your sensor according to the pin used. You can find your Uid in the <b>setting
+                            tab</b>.</p>
+                    <div class="card card-code">
+                        <div class="card-body">
+                            <pre>
+//Firebase Library for arduino/nodeMCU by K Suwatchai
+//Code by Indra Wirananta
+
+//Library
+//#include &ltWiFi.h>
+#include &ltWiFiUdp.h>
+#include &ltNTPClient.h>//go get time from NTP
+#include &ltFirebase_ESP_Client.h> //For firebase related stuff
+#include &ltArduino.h>// for arduino
+#include &ltdht.h> // commnunication with dht sensor
+
+//Provide the token generation process info.
+#include &ltaddons/TokenHelper.h>
+
+/* 1. Define the WiFi credentials */
+#define WIFI_SSID "<code>Insert your wifi name here</code>"
+#define WIFI_PASSWORD "<code>Insert your wifi password here</code>"
+
+/* 2. Define the API Key */
+#define API_KEY "AIzaSyB4sz3w6d7sWBWlqMMHWUGJ6Zjn7ULnuD0"
+
+/* 3. Define the project ID */
+#define FIREBASE_PROJECT_ID "companion-d01bb"
+
+/* 4. Define the user Email and password that alreadey registerd or added in your project */
+#define USER_EMAIL "<code>Insert your registered email here</code>"
+#define USER_PASSWORD "<code>Insert your password here</code>"
+#define USER_UID "<code>Insert your Uid here</code>"
+#define MODUL_NAME "<code>Insert your module name here</code>"
+
+<code>
+//define your sensor here
+//e.g.,
+#define motionsensorPin D7
+#define temperaturePin D5
+</code>
+                            </pre>
+
+                        </div>
+                    </div>
+                    <p class="card-text mt-4 mb-4">This part is used to setup connection between your module and the
+                        database. You don't need to change anything here unless your sensor needs it.</p>
+                    <div class="card card-code">
+                        <div class="card-body">
+                            <pre>
+//Define Firebase Data object
+FirebaseData fbdo;
+
+FirebaseAuth auth;
+FirebaseConfig config;
+
+unsigned long dataMillis = 0;
+int count = 0;
+WiFiUDP ntpUDP;
+NTPClient timeClient(ntpUDP, "pool.ntp.org");
+
+void setup()
+{
+  Serial.begin(115200);
+
+  WiFi.begin(WIFI_SSID, WIFI_PASSWORD);
+  Serial.print("Connecting to Wi-Fi");
+  while (WiFi.status() != WL_CONNECTED)
+  {
+    Serial.print(".");
+    delay(300);
+  }
+  Serial.println();
+  Serial.print("Connected with IP: ");
+  Serial.println(WiFi.localIP());
+  Serial.println();
+
+  Serial.printf("Firebase Client v%s\n\n", FIREBASE_CLIENT_VERSION);
+
+  /* Assign the api key (required) */
+  config.api_key = API_KEY;
+
+  /* Assign the user sign in credentials */
+  auth.user.email = USER_EMAIL;
+  auth.user.password = USER_PASSWORD;
+
+  /* Assign the callback function for the long running token generation task */
+  config.token_status_callback = tokenStatusCallback; //see addons/TokenHelper.h
+  timeClient.begin();
+  Firebase.begin(&config, &auth);
+  Firebase.reconnectWiFi(true);
+  delay(1500);
+}
+                       </pre>
+                        </div>
+                    </div>
+                    <p class="card-text mt-4 mb-4">This part of the code will loop every set duration. You need to read
+                        your sensor and assign the value to a variable, which will be used in setting up new payload.
+                        You can see the example in the codes below. </p>
+                    <div class="card card-code">
+                        <div class="card-body">
+                            <pre>
+
+void loop()
+{
+    timeClient.update();
+    if (Firebase.ready() && (millis() - dataMillis > 60000 * <code>5 /<-- *change this value to change update time, 5 is for 5 minute*/</code>
+    {
+    <code>
+    //read your sensor and assign them in this part of the code.
+    //e.g., 
+    int motionSensor = digitalRead(motionsensorPin);
+    int temperature = digitalRead(motionsensorPin);
+
+    </code>
+    int timestamp = timeClient.getEpochTime();
+    dataMillis = millis();
+    String documentPath = "users/" USER_UID "/sensor/" MODUL_NAME;
+    String field = "reading";
+    std::vector<struct fb_esp_firestore_document_write_t> writes;
+    struct fb_esp_firestore_document_write_t transform_write;
+    transform_write.type = fb_esp_firestore_document_write_type_transform;
+    transform_write.document_transform.transform_document_path = "users/" USER_UID "/sensor/" MODUL_NAME;
+    struct fb_esp_firestore_document_write_field_transforms_t field_transforms;
+    field_transforms.fieldPath = "reading";
+    field_transforms.transform_type = fb_esp_firestore_transform_type_append_missing_elements;
+
+    
+    FirebaseJson content;
+    FirebaseJson newPayload;
+    <code>
+    //set new payload for each sensor 
+    //e.g.,
+    newPayload.set("/mapValue/fields/temperature/integerValue", temperature);
+    newPayload.set("/mapValue/fields/motionSensor/integerValue", motionSensor);
+    </code>
+    newPayload.set("/mapValue/fields/timestamp/integerValue", timestamp);
+    content.set("values", newPayload);
+    
+    field_transforms.transform_content = content.raw();
+    transform_write.document_transform.field_transforms.push_back(field_transforms);
+    writes.push_back(transform_write);
+
+
+    if (Firebase.Firestore.commitDocument(&fbdo, FIREBASE_PROJECT_ID, "" /* databaseId can be (default) or empty */, writes /* dynamic array of fb_esp_firestore_document_write_t */, "" /* transaction */))
+        Serial.println("data sent succesfully");
+    else
+        Serial.println(fbdo.errorReason());
+
+    }
+}
+                                         
+                                </pre>
+                        </div>
+                    </div>
+                    <p class="card-text mt-4 mb-4">Copy the code above and change the required codes to match your user
+                        account and your module, and then upload it to your module. Connect your module to power and
+                        your module is completely setup! </p>
+                </div>
+            </div>
+
+        </div>
+
+
+
+
+
+        <script src="https://www.gstatic.com/firebasejs/5.6.0/firebase-app.js"></script>
+        <script src="https://www.gstatic.com/firebasejs/5.6.0/firebase-auth.js"></script>
+        <script src="https://www.gstatic.com/firebasejs/5.6.0/firebase-firestore.js"></script>
+        <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
+        <script src="/assets/js/bootstrap.bundle.js"></script>
+        <script src="/js/firebase.js"></script>
+        <script src="/js/sidebar.js"></script>
+        <script src="/js/loading_screen.js"></script>
+        <script src="/js/setting.js"></script>
+</body>
+
+</html>

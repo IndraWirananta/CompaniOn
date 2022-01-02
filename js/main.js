@@ -119,7 +119,7 @@ addCategoryBtn.addEventListener("click", (e) => {
       '<div id="add-sensor-alert" class="alert alert-danger alert-dismissible fade show" role="alert">Sensor module must have unique name!<button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button></div>'
     );
   } else {
-    arrCategory.push(addCategoryInput.value);
+    arrCategory.push(addCategoryInput.value.replace(/ /g, "_"));
     $("#add-sensor-alert").remove();
     addCategory(arrCategory);
   }
@@ -132,7 +132,7 @@ function addCategory(input) {
     $("#sensor-category").append(
       '<li class="list-group-item category-item">' +
         e +
-        '<button type="button" onclick="deleteCategory(' +
+        '<button type="button" onclick="deleteCategoryByIndex(' +
         "'" +
         e +
         "'" +
@@ -141,7 +141,7 @@ function addCategory(input) {
   });
 }
 // delete category
-function deleteCategory(e) {
+function deleteCategoryByIndex(e) {
   const index = arrCategory.indexOf(e);
   if (index > -1) {
     arrCategory.splice(index, 1);
@@ -159,20 +159,19 @@ const addSensorForm = document.getElementById("addSensorForm");
 addSensorForm.addEventListener("submit", (e) => {
   e.preventDefault();
 
-  var name = addSensorForm.sensor_name_field.value;
-  var group = addSensorForm.sensor_group_field.value;
+  var name = addSensorForm.sensor_name_field.value.replace(/ /g, "_");
+  var group = addSensorForm.sensor_group_field.value.replace(/ /g, "_");
   var desc = addSensorForm.sensor_description_field.value;
 
   if (
     name == "" ||
     name == null ||
     group == "" ||
-    group == null ||
-    arrCategory.length == 0
+    group == null 
   ) {
     $("#add-sensor-alert").remove();
     $("#alert-add-sensor").append(
-      '<div id="add-sensor-alert" class="alert alert-danger alert-dismissible fade show" role="alert">Name, group, and sensor cannot be empty!<button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button></div>'
+      '<div id="add-sensor-alert" class="alert alert-danger alert-dismissible fade show" role="alert">Name, and group cannot be empty!<button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button></div>'
     );
   } else {
     db.collection("users")
@@ -251,29 +250,67 @@ function editGroupName(groupName, newGroupName, idGroupModal) {
 }
 
 // for editing module nickname
-function editModuleNickname(moduleName, newNickname, idModuleModal) {
-  if(newNickname==""){
+function editModuleInfo(moduleName, newNickname, newDesc,newGroup, idModuleModal) {
+  if (newNickname == "") {
     db.collection("users")
       .doc(userUid)
       .collection("sensor")
       .doc(moduleName)
       .update({
         nick: null,
-      }).then(()=>{
+        desc: newDesc,
+        group: newGroup.replace(/ /g, "_")
+        
+      })
+      .then(() => {
         $("#" + idModuleModal).modal("hide");
         updateChart();
-      })
-  }else{
+      });
+  } else {
     db.collection("users")
       .doc(userUid)
       .collection("sensor")
       .doc(moduleName)
       .update({
         nick: newNickname.replace(/ /g, "_"),
-      }).then(()=>{
+        desc: newDesc,
+        group: newGroup.replace(/ /g, "_")
+      })
+      .then(() => {
         $("#" + idModuleModal).modal("hide");
         updateChart();
+      });
+  }
+}
+function addSensorToExistingModule(
+  moduleName,
+  newSensor,
+  idModuleAddSensorModal,
+  idModuleAddSensorAlert,
+  sensorList
+) {
+  if (newSensor == "") {
+    $("#add-newSensor-alert").remove();
+    $("#" + idModuleAddSensorAlert).append(
+      '<div id="add-newSensor-alert" class="alert alert-danger alert-dismissible fade show" role="alert">Sensor name cannot be empty!<button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button></div>'
+    );
+  } else if (sensorList.includes(newSensor)) {
+    $("#add-newSensor-alert").remove();
+    $("#" + idModuleAddSensorAlert).append(
+      '<div id="add-newSensor-alert" class="alert alert-danger alert-dismissible fade show" role="alert">Sensor already exist!<button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button></div>'
+    );
+  } else {
+    db.collection("users")
+      .doc(userUid)
+      .collection("sensor")
+      .doc(moduleName)
+      .update({
+        sensors: firebase.firestore.FieldValue.arrayUnion(newSensor.replace(/ /g, "_")),
       })
+      .then(() => {
+        $("#" + idModuleAddSensorModal).modal("hide");
+        updateChart();
+      });
   }
 }
 
@@ -290,24 +327,30 @@ function addLegend(
   $("." + classWrapperModule).animate({
     scrollLeft: newwidth,
   });
- 
+  setTimeout(function () {
     var sourceCanvas = myChart.chart.canvas;
     var copyWidth = myChart.scales["y-axis-0"].width + 10;
     var copyHeight =
       myChart.scales["y-axis-0"].height + myChart.scales["y-axis-0"].top - 10;
-    var targetCtx = document.getElementById(chartAxisId).getContext("2d");
-    targetCtx.canvas.width = copyWidth;
-    targetCtx.drawImage(
-      sourceCanvas,
-      0,
-      0,
-      copyWidth,
-      copyHeight,
-      0,
-      0,
-      copyWidth,
-      copyHeight
-    );
+    try {
+      var targetCtx = document.getElementById(chartAxisId).getContext("2d");
+      targetCtx.canvas.width = copyWidth;
+      targetCtx.drawImage(
+        sourceCanvas,
+        0,
+        0,
+        copyWidth,
+        copyHeight,
+        0,
+        0,
+        copyWidth,
+        copyHeight
+      );
+    } catch (error) {
+      console.log("Canvas has not been loaded yet")
+    }
+    
+  }, 350);
 }
 
 function addDragScroll(classWrapperModule) {
@@ -340,13 +383,16 @@ function addDragScroll(classWrapperModule) {
 function createChart() {
   console.log("Creating Chart...");
   return new Promise((resolve) => {
+    let totalSensor = 0;
     db.collection("users")
       .doc(userUid)
       .collection("sensor")
       .get()
       .then((doc) => {
+       
         var newChartArray = [];
         doc.forEach((docs) => {
+          totalSensor = totalSensor+1;
           var sensorList = docs.data().sensors;
           var moduleName = docs.id;
           var nickname = docs.data().nick;
@@ -358,11 +404,24 @@ function createChart() {
           var idGroupForm = "form-" + groupName;
           var idModule = "wrapper-" + moduleName + "-" + groupName;
           var idModuleModal = "modal-" + moduleName + "-" + groupName;
+          var idGroupDeleteModal = "deleteGroupModal-" + moduleName + "-" + groupName;
+          var idGroupDeleteForm = "deleteGroupForm-" + moduleName + "-" + groupName;
           var idModuleForm = "form-" + moduleName + "-" + groupName;
+          var idModuleAddSensorModal =
+            "addSensorModal-" + moduleName + "-" + groupName;
+          var idModuleAddSensorForm =
+            "addSensorForm-" + moduleName + "-" + groupName;
+          var idModuleDeleteModal =
+            "moduleDeleteModal-" + moduleName + "-" + groupName;
+          var idModuleDeleteForm =
+            "moduleDeleteForm-" + moduleName + "-" + groupName;
+          var idModuleAddSensorAlert =
+            "addSensorAlert-" + moduleName + "-" + groupName;
           var idNickname = "nick-" + moduleName + "-" + groupName;
 
+          // check if element exist or not
           if ($("#" + idGroup).length == 0) {
-            // check if element exist or not
+            //modal for changing group name
             $("#modal-area").append(
               '<div class="modal fade" id=' +
                 idGroupModal +
@@ -388,6 +447,32 @@ function createChart() {
                 "</div>" +
                 "</div>"
             );
+
+          // modal for deleting group and everything inside
+          $("#modal-area").append(
+            '<div class="modal fade" id=' +
+            idGroupDeleteModal +
+              ">" +
+              '<div class="modal-dialog modal-dialog-centered">' +
+              '<form class="modal-content" id="' +
+              idGroupDeleteForm +
+              '">' +
+              '<div class="modal-header text-center">' +
+              '<h4 class="modal-title text-center w-100 font-weight-bold">Delete Group</h4>' +
+              "</div>" +
+              '<div class="modal-body  mx-3">' +
+              '<div class="md-form mb-3">' +
+              '<label data-error="wrong" class=" mb-3" data-success="right">Are you sure you want to delete <b>'+groupName+'</b>? Every module inside this group will also be deleted</label>' +
+              "</div>" +
+              "</div>" +
+              '<div class="dialog-delete-confirmation"><button value="yes" id="yes" type="submit" class="btn btn-primary btn-signup"' +
+              ')">Yes</button>' +
+              '<button type="reset" value="no" id="no" class=" btn btn-primary btn-signup"' +
+              ')">No</button></div>' +
+              "</form>" +
+              "</div>" +
+              "</div>"
+          );
             let groupNameModalform = document.getElementById(idGroupForm);
             groupNameModalform.addEventListener("submit", (e) => {
               e.preventDefault();
@@ -397,15 +482,52 @@ function createChart() {
                 idGroupModal
               );
             });
+            let deleteGroupForm = document.getElementById(idGroupDeleteForm);
+            deleteGroupForm.addEventListener("reset", (e) => {
+              e.preventDefault();
+              $("#" + idGroupDeleteModal).modal("hide");
+            });
+            deleteGroupForm.addEventListener("submit", (e) => {
+              e.preventDefault();
+              db.collection("users")
+                .doc(userUid)
+                .collection("sensor")
+                .get().then((e)=>{
+                  e.forEach((docs)=>{
+                    if(docs.data().group==groupName){
+                      db.collection("users")
+                      .doc(userUid)
+                      .collection("sensor").doc(docs.id).delete()
+                    }
+                  })
+                  console.log("Group successfully deleted!");
+                  $("#" + idGroupDeleteModal).modal("hide");
+                  updateChart();
+                })
+                
+            });
 
             $("#chart-area").append(
               '<div class="card mb-4 text-start"><div class="card text-start"><div class="card-body" id="' +
                 idGroup +
                 '"><div class="group-name"><h2 class="card-title">' +
                 groupName +
-                '</h2> <button type="button" data-bs-toggle="modal"  class="btn btn-edit" data-bs-target="#' +
+                "</h2> " +
+                '<button type="button" data-bs-toggle="modal"' +
+                'data-bs-target="#' +
                 idGroupModal +
-                '"><i class="bx bx-sm bx-edit"></i></button></i></div><br></div></div></div>'
+                '" class=" set-to-left edit-group" aria-expanded="true"' +
+                ">" +
+                '<i class="bx  bx-edit"></i>' +
+                "</button>" +
+                '<button type="button" data-bs-toggle="modal"' +
+                'data-bs-target="#' +
+                idGroupDeleteModal +
+                '" class=" edit-group " aria-expanded="true"' +
+                ">" +
+                '<i class="bx  bx-trash-alt"></i>' +
+                "</button>" +
+                "</div><br></div></div></div>"
             );
           }
 
@@ -421,10 +543,11 @@ function createChart() {
               moduleDesc +
               "</p><hr /></div>"
           );
-            var displayValueNickname = "";
-          if (nickname!=null){
+          var displayValueNickname = "";
+          if (nickname != null) {
             displayValueNickname = nickname;
           }
+          //modal for changing modul description
           $("#modal-area").append(
             '<div class="modal fade" id=' +
               idModuleModal +
@@ -438,9 +561,21 @@ function createChart() {
               "</div>" +
               '<div class="modal-body  mx-3">' +
               '<div class="md-form mb-3">' +
+              '<label data-error="wrong" class=" mb-3" data-success="right">Edit module description</label>' +
+              '<input type="text" id="description_field" class="form-control validate" value="' +
+              moduleDesc +
+              '">' +
+              "</div>" +
+              '<div class="md-form mb-3">' +
               '<label data-error="wrong" class=" mb-3" data-success="right">Give module a nickname</label>' +
               '<input type="text" id="nickname_field" class="form-control validate" value="' +
               displayValueNickname +
+              '">' +
+              "</div>" +
+              '<div class="md-form mb-3">' +
+              '<label data-error="wrong" class=" mb-3" data-success="right">Change module group</label>' +
+              '<input type="text" id="group_field" class="form-control validate" value="' +
+            groupName +
               '">' +
               "</div>" +
               "</div>" +
@@ -450,15 +585,98 @@ function createChart() {
               "</div>" +
               "</div>"
           );
+          // modal for adding module sensor e.g. temperature
+          $("#modal-area").append(
+            '<div class="modal fade" id=' +
+              idModuleAddSensorModal +
+              ">" +
+              '<div class="modal-dialog modal-dialog-centered">' +
+              '<form class="modal-content" id="' +
+              idModuleAddSensorForm +
+              '">' +
+              '<div class="modal-header text-center">' +
+              '<h4 class="modal-title text-center w-100 font-weight-bold">Add Sensor</h4>' +
+              "</div>" +
+              '<div class="modal-body  mx-3">' +
+              '<div class="md-form mb-3">' +
+              "<div id=" +
+              idModuleAddSensorAlert +
+              "></div>" +
+              '<label data-error="wrong" class=" mb-3" data-success="right">New Sensor Name</label>' +
+              '<input type="text" id="new_sensor_field" class="form-control validate" placeholder="e.g., temperature">' +
+              "</div>" +
+              "</div>" +
+              '<button type="submit" class="btn btn-primary btn-signup"' +
+              ')">Submit</button>' +
+              "</form>" +
+              "</div>" +
+              "</div>"
+          );
+          // modal for deleting module
+          $("#modal-area").append(
+            '<div class="modal fade" id=' +
+              idModuleDeleteModal +
+              ">" +
+              '<div class="modal-dialog modal-dialog-centered">' +
+              '<form class="modal-content" id="' +
+              idModuleDeleteForm +
+              '">' +
+              '<div class="modal-header text-center">' +
+              '<h4 class="modal-title text-center w-100 font-weight-bold">Delete Module</h4>' +
+              "</div>" +
+              '<div class="modal-body  mx-3">' +
+              '<div class="md-form mb-3">' +
+              '<label data-error="wrong" class=" mb-3" data-success="right">Are you sure you want to delete <b>'+moduleName+'</b>?</label>' +
+              "</div>" +
+              "</div>" +
+              '<div class="dialog-delete-confirmation"><button value="yes" id="yes" type="submit" class="btn btn-primary btn-signup"' +
+              ')">Yes</button>' +
+              '<button type="reset" value="no" id="no" class=" btn btn-primary btn-signup"' +
+              ')">No</button></div>' +
+              "</form>" +
+              "</div>" +
+              "</div>"
+          );
 
-          let groupNameModalform = document.getElementById(idModuleForm);
-          groupNameModalform.addEventListener("submit", (e) => {
+          let moduleForm = document.getElementById(idModuleForm);
+          moduleForm.addEventListener("submit", (e) => {
             e.preventDefault();
-            editModuleNickname(
+            editModuleInfo(
               moduleName,
-              groupNameModalform.nickname_field.value,
+              moduleForm.nickname_field.value,
+              moduleForm.description_field.value,
+              moduleForm.group_field.value,
               idModuleModal
             );
+          });
+          let addNewSensorForm = document.getElementById(idModuleAddSensorForm);
+          addNewSensorForm.addEventListener("submit", (e) => {
+            e.preventDefault();
+            addSensorToExistingModule(
+              moduleName,
+              addNewSensorForm.new_sensor_field.value,
+              idModuleAddSensorModal,
+              idModuleAddSensorAlert,
+              sensorList
+            );
+          });
+          let deleteModuleForm = document.getElementById(idModuleDeleteForm);
+          deleteModuleForm.addEventListener("reset", (e) => {
+            e.preventDefault();
+            $("#" + idModuleDeleteModal).modal("hide");
+          });
+          deleteModuleForm.addEventListener("submit", (e) => {
+            e.preventDefault();
+            db.collection("users")
+              .doc(userUid)
+              .collection("sensor")
+              .doc(moduleName)
+              .delete()
+              .then(() => {
+                console.log("Module successfully deleted!");
+                $("#" + idModuleDeleteModal).modal("hide");
+                updateChart();
+              });
           });
 
           if (nickname != null) {
@@ -470,9 +688,27 @@ function createChart() {
             );
           }
           $("#" + idNickname).append(
-            '<button type="button" data-bs-toggle="modal" class="btn btn-edit" data-bs-target="#' +
+            '<button type="button" data-bs-toggle="modal"' +
+              'data-bs-target="#' +
+              idModuleAddSensorModal +
+              '" class="set-to-left btn-sensor-existing add-sensor-button" aria-expanded="true"' +
+              'aria-controls="collapseSensor">' +
+              "<i class='bx bx-plus'></i>" +
+              "</button>" +
+              '<button type="button" data-bs-toggle="modal"' +
+              'data-bs-target="#' +
               idModuleModal +
-              '"><i class="bx bx-edit-alt bx-sm"></i></button>'
+              '" class=" btn-sensor-existing add-sensor-button" aria-expanded="true"' +
+              'aria-controls="collapseSensor">' +
+              '<i class="bx  bx-edit-alt"></i>' +
+              "</button>" +
+              '<button type="button" data-bs-toggle="modal"' +
+              'data-bs-target="#' +
+              idModuleDeleteModal +
+              '" class=" btn-sensor-existing add-sensor-button" aria-expanded="true"' +
+              'aria-controls="collapseSensor">' +
+              '<i class="bx bx-trash"></i>' +
+              "</button>"
           );
 
           // append sensor/s to the module card
@@ -500,10 +736,70 @@ function createChart() {
             var chartAxisId =
               "chartAxis-" + sensorName + "-" + moduleName + "-" + groupName;
 
+            var idDeleteSensorForm =
+              "deleteSensorForm-" + sensorName + "-" + moduleName + "-" + groupName;
+            var idDeleteSensorModal =
+              "deleteSensorModal-" + sensorName + "-" + moduleName + "-" + groupName;
+
+              $("#modal-area").append(
+                '<div class="modal fade" id=' +
+                idDeleteSensorModal +
+                ">" +
+                '<div class="modal-dialog modal-dialog-centered">' +
+                '<form class="modal-content" id="' +
+                idDeleteSensorForm +
+                '">' +
+                '<div class="modal-header text-center">' +
+                '<h4 class="modal-title text-center w-100 font-weight-bold">Delete Sensor</h4>' +
+                "</div>" +
+                '<div class="modal-body  mx-3">' +
+                '<div class="md-form mb-3">' +
+                '<label data-error="wrong" class=" mb-3" data-success="right">Are you sure you want to delete <b>'+sensorName+'</b> from this module?</label>' +
+                "</div>" +
+                "</div>" +
+                '<div class="dialog-delete-confirmation"><button value="yes" id="yes" type="submit" class="btn btn-primary btn-signup"' +
+                ')">Yes</button>' +
+                '<button type="reset" value="no" id="no" class=" btn btn-primary btn-signup"' +
+                ')">No</button></div>' +
+                "</form>" +
+                "</div>" +
+                "</div>"
+              );
+
+              let deleteSensorForm = document.getElementById(idDeleteSensorForm);
+              let idModalCopy =JSON.parse(JSON.stringify(idDeleteSensorModal)) ;
+              let deletedSensorCopy = JSON.parse(JSON.stringify(sensorName ));
+              deleteSensorForm.addEventListener("reset", (e) => {
+                e.preventDefault();
+                $("#" + idModalCopy).modal("hide");
+              });
+              deleteSensorForm.addEventListener("submit", (e) => {
+                e.preventDefault();
+                db.collection("users")
+                  .doc(userUid)
+                  .collection("sensor")
+                  .doc(moduleName)
+                  .update({
+                    sensors:firebase.firestore.FieldValue.arrayRemove(deletedSensorCopy)
+                  })
+                  .then(() => {
+                    console.log("Sensor successfully deleted!");
+                    $("#" + idModalCopy).modal("hide");
+                    updateChart();
+                  });
+              });
             $("#" + idModule).append(
-              '<h5 class="card-text mt-4 ">' +
+              '<div class="module-name"><h5 class="card-text mt-4 ">' +
                 sensorName +
-                '</h5><div class="chartWrapper"><div class="mb-5 ' +
+                '</h5>'+
+                '<button type="button" data-bs-toggle="modal"' +
+                'data-bs-target="#' +
+                idDeleteSensorModal +
+                '" class=" btn-sensor-existing set-to-left add-sensor-button" aria-expanded="true"' +
+                'aria-controls="collapseSensor">' +
+                '<i class="bx bx-trash"></i>' +
+                "</button></div>"
+                +'<div class="chartWrapper"><div class=" mt-3 mb-1 ' +
                 classWrapperModule +
                 ' cw"><div class="' +
                 classWrapper2Module +
@@ -609,14 +905,22 @@ function createChart() {
             addDragScroll(classWrapperModule);
           }
         });
+        setTotalSensor(totalSensor);
         resolve(newChartArray);
       });
   });
 }
 
+// set total sensor
+function setTotalSensor(totalSensor){
+  console.log(totalSensor)
+  document.getElementById("sensor-total").innerHTML = totalSensor + " Online"
+}
+
 // update the chart
 function updateChart() {
   $("#chart-area").empty();
+  $("#modal-area").empty();
   chartHandler();
 }
 

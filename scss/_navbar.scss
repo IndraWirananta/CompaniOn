@@ -84,7 +84,20 @@
     justify-content: center; /* align horizontal */
     align-items: center; /* align vertical */
 }
-
+.navbar-menu-wrapper{
+    width: 100%;
+    display: flex;
+    align-items: baseline;
+    color: $white;
+    font-weight: 500;
+    font-size: 18px;
+    p{
+        margin-right: auto;
+        margin-left: 50px;
+        margin-top: 0;
+        margin-bottom: 0;
+    }
+}
 .authButton{
     position: static;
     padding: 0.2rem 1.05rem;

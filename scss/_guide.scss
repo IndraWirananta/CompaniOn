@@ -1,0 +1,10 @@
+@use 'custom' as *;
+
+
+.card-code{
+    background-color:$gray-100;
+
+    code{
+        color: $red;    
+    }
+}

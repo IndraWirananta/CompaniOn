@@ -1,0 +1,246 @@
+<!DOCTYPE html>
+<html lang="en" dir="ltr">
+
+<head>
+    <meta charset="UTF-8" />
+    <title>CompaniOn</title>
+    <link rel="stylesheet" href="assets/css/style.css" />
+    <link rel="stylesheet" href="assets/css/fontawesome.css" />
+    <link href="https://unpkg.com/boxicons@2.0.7/css/boxicons.min.css" rel="stylesheet" />
+    <link rel="icon" type="image/png" href="assets/images/favicon-32x32.png" sizes="32x32" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+</head>
+
+<body class="body-main">
+    <!-- load screen -->
+    <div class="loader-wrapper">
+        <span class="loader"><span class="loader-inner"></span></span>
+    </div>
+
+    <!-- actual page -->
+    <div class="sidebar close">
+        <ul class="nav-links">
+            <li id="burger">
+                <a>
+                    <i class="burger-icon bx bxs-chevron-right" id="burger-icon"></i>
+                    <span class="link_name">Companion</span>
+                </a>
+            </li>
+            <li>
+                <a>
+                    <i class="bx bx-grid-alt" onclick="window.location.href='./index.html'"></i>
+                    <span class="link_name" onclick="window.location.href='./index.html'">Dashboard</span>
+                </a>
+                <ul class="sub-menu blank">
+                    <li>
+                        <a class="link_name" onclick="window.location.href='./index.html'">Dashboard</a>
+                    </li>
+                </ul>
+            </li>
+            <li>
+                <a>
+                    <i class='bx bxs-bar-chart-square' onclick="window.location.href='./main.html'"></i>
+                    <span class="link_name" onclick="window.location.href='./main.html'">Apps</span>
+                </a>
+                <ul class="sub-menu blank">
+                    <li>
+                        <a class="link_name" onclick="window.location.href='./main.html'">Apps</a>
+                    </li>
+                </ul>
+            </li>
+            <li>
+                <a>
+                    <i class='bx bxs-book-content' onclick="window.location.href='./guide.html'"></i>
+                    <span class="link_name" onclick="window.location.href='./guide.html'">Guide</span>
+                </a>
+                <ul class="sub-menu blank">
+                    <li><a class="link_name" onclick="window.location.href='./guide.html'">Guide</a></li>
+                </ul>
+            </li>
+            <li>
+                <a>
+                    <i class='bx bx-help-circle' onclick="window.location.href='./help.html'"></i>
+                    <span class="link_name" onclick="window.location.href='./help.html'">Help</span>
+                </a>
+                <ul class="sub-menu blank">
+                    <li><a class="link_name" onclick="window.location.href='./help.html'">Help</a></li>
+                </ul>
+            </li>
+            <li>
+                <a>
+                    <i class="bx bx-cog" onclick="window.location.href='./setting.html'"></i>
+                    <span class="link_name" onclick="window.location.href='./setting.html'">Setting</span>
+                </a>
+                <ul class="sub-menu blank">
+                    <li><a class="link_name" onclick="window.location.href='./setting.html'">Setting</a></li>
+                </ul>
+            </li>
+        </ul>
+    </div>
+    <!-- REAL DISPLAY SECTION -->
+    <section class="real-display">
+        <div class="appbar-main shadow-sm-sm">
+            <div class="appbar-header">
+                <div class="hstack gap-3">
+                    <a class="navbar-brand">
+                        <img class="logo-medium" src="assets/images/companion.PNG" alt="CompaniOn" />
+                    </a>
+                    <div class="vr"></div>
+                    <div class="user-welcome-message align-middle">
+                        <p id="welcome-message">Welcome Message</p>
+                    </div>
+                    <button id="logout" type="button" class="rounded-pill logout-button ms-auto">
+                        <span>Log out<i class="bx bx-log-out logout-icon"></i> </span>
+                    </button>
+                </div>
+            </div>
+        </div>
+
+        <div style="height: 60px"></div>
+        <div class="user-setting p-4">
+            <div class="card ">
+                <div class="card-body">
+                    <div class="row text-center">
+                        <h2 class=" fw-bold text-uppercase">Help Section</h2>
+                    </div>
+                    <p class="card-text mt-3 mb-3">Need a little helping hand buddy? The following is are some
+                        frequently answered question, but if you didn't find the answer you're looking for here, feel
+                        free to contact us at <b>comp@nion.com</b></p>
+                    <hr>
+                    <!-- ACCORDION CONTENT  -->
+                    <div class="row mt-5 mb-5">
+                        <div class="col-md-12">
+                            <div class="accordion" id="accordionExample">
+                                <!-- ACCORDION ITEM 1 -->
+                                <div class="accordion-item shadow-sm mb-3">
+                                    <h2 class="accordion-header" id="headingOne">
+                                        <button class="accordion-button" type="button" data-bs-toggle="collapse"
+                                            data-bs-target="#collapseOne" aria-expanded="true"
+                                            aria-controls="collapseOne">
+                                            What are the main features?
+                                        </button>
+                                    </h2>
+                                    <div id="collapseOne" class="accordion-collapse collapse show"
+                                        aria-labelledby="headingOne" data-bs-parent="#accordionExample">
+                                        <div class="accordion-body">
+                                            <strong>Environment monitoring.</strong> It is crucial that we, as a pet
+                                            owner knows
+                                            our pet wellbeing. Our services offer monitoring using multiple various
+                                            sensor to
+                                            monitor environment variable. Our services support multipe module, with
+                                            multiple
+                                            sensor, that can be configure according to your pet's need.
+                                        </div>
+                                    </div>
+                                </div>
+                                <!-- ACCORDION ITEM 2 -->
+                                <div class="accordion-item shadow-sm mb-3">
+                                    <h2 class="accordion-header" id="headingTwo">
+                                        <button class="accordion-button collapsed" type="button"
+                                            data-bs-toggle="collapse" data-bs-target="#collapseTwo"
+                                            aria-expanded="false" aria-controls="collapseTwo">
+                                            Do i have to pay?
+                                        </button>
+                                    </h2>
+                                    <div id="collapseTwo" class="accordion-collapse collapse"
+                                        aria-labelledby="headingTwo" data-bs-parent="#accordionExample">
+                                        <div class="accordion-body">
+                                            <strong>No, our service is completely free.</strong> This is a freeware that
+                                            our
+                                            company offer to help you monitor your pet wellbeing while you are away.
+                                        </div>
+                                    </div>
+                                </div>
+                                <!-- ACCORDION ITEM 3 -->
+                                <div class="accordion-item shadow-sm mb-3">
+                                    <h2 class="accordion-header" id="headingThree">
+                                        <button class="accordion-button collapsed" type="button"
+                                            data-bs-toggle="collapse" data-bs-target="#collapseThree"
+                                            aria-expanded="false" aria-controls="collapseThree">
+                                            How can I get started?
+                                        </button>
+                                    </h2>
+                                    <div id="collapseThree" class="accordion-collapse collapse"
+                                        aria-labelledby="headingThree" data-bs-parent="#accordionExample">
+                                        <div class="accordion-body">
+                                            <strong>Create an account.</strong> You can press the start button on the
+                                            top of the
+                                            site, or the sign up button on the navigation bar to start your journey with
+                                            us.
+                                        </div>
+                                    </div>
+                                </div>
+                                <!-- ACCORDION ITEM 4 -->
+                                <div class="accordion-item shadow-sm mb-3">
+                                    <h2 class="accordion-header" id="headingFive">
+                                        <button class="accordion-button collapsed" type="button"
+                                            data-bs-toggle="collapse" data-bs-target="#collapseFive"
+                                            aria-expanded="false" aria-controls="collapseFive">
+                                            What do you do with our data?
+                                        </button>
+                                    </h2>
+                                    <div id="collapseFive" class="accordion-collapse collapse"
+                                        aria-labelledby="headingFive" data-bs-parent="#accordionExample">
+                                        <div class="accordion-body">
+                                            <strong>Nothing.</strong> We do not use our customer data for anything.
+                                        </div>
+                                    </div>
+                                </div>
+                                <!-- ACCORDION ITEM 5 -->
+                                <div class="accordion-item shadow-sm mb-3">
+                                    <h2 class="accordion-header" id="headingSix">
+                                        <button class="accordion-button collapsed" type="button"
+                                            data-bs-toggle="collapse" data-bs-target="#collapseSix"
+                                            aria-expanded="false" aria-controls="collapseSix">
+                                            How do i setup my module
+                                        </button>
+                                    </h2>
+                                    <div id="collapseSix" class="accordion-collapse collapse"
+                                        aria-labelledby="headingSix" data-bs-parent="#accordionExample">
+                                        <div class="accordion-body">
+                                            You can check the guide tab, there you will find code snippets that you can
+                                            upload to your module.
+                                        </div>
+                                    </div>
+                                </div>
+                                <!-- ACCORDION ITEM 6 -->
+                                <div class="accordion-item shadow-sm mb-3">
+                                    <h2 class="accordion-header" id="headingFour">
+                                        <button class="accordion-button collapsed" type="button"
+                                            data-bs-toggle="collapse" data-bs-target="#collapseFour"
+                                            aria-expanded="false" aria-controls="collapseFour">
+                                            I have set my module up, but i didn't see any data on my chart!
+                                        </button>
+                                    </h2>
+                                    <div id="collapseFour" class="accordion-collapse collapse"
+                                        aria-labelledby="headingFour" data-bs-parent="#accordionExample">
+                                        <div class="accordion-body">
+                                            Check your Uid, username, and password. If everything match, then there is
+                                            something wrong with your code.
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+        </div>
+
+
+
+
+
+        <script src="https://www.gstatic.com/firebasejs/5.6.0/firebase-app.js"></script>
+        <script src="https://www.gstatic.com/firebasejs/5.6.0/firebase-auth.js"></script>
+        <script src="https://www.gstatic.com/firebasejs/5.6.0/firebase-firestore.js"></script>
+        <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
+        <script src="/assets/js/bootstrap.bundle.js"></script>
+        <script src="/js/firebase.js"></script>
+        <script src="/js/sidebar.js"></script>
+        <script src="/js/loading_screen.js"></script>
+        <script src="/js/setting.js"></script>
+</body>
+
+</html>

@@ -39,29 +39,40 @@
             </li>
             <li>
                 <a>
-                    <i class='bx bxs-book-content'></i>
-                    <span class="link_name">Guide</span>
+                    <i class='bx bxs-bar-chart-square' onclick="window.location.href='./main.html'"></i>
+                    <span class="link_name" onclick="window.location.href='./main.html'">Apps</span>
                 </a>
                 <ul class="sub-menu blank">
-                    <li><a class="link_name">Guide</a></li>
+                    <li>
+                        <a class="link_name" onclick="window.location.href='./main.html'">Apps</a>
+                    </li>
                 </ul>
             </li>
             <li>
                 <a>
-                    <i class='bx bx-help-circle'></i>
-                    <span class="link_name">Help</span>
+                    <i class='bx bxs-book-content' onclick="window.location.href='./guide.html'"></i>
+                    <span class="link_name" onclick="window.location.hrfef='./guide.html'">Guide</span>
                 </a>
                 <ul class="sub-menu blank">
-                    <li><a class="link_name">Help</a></li>
+                    <li><a class="link_name" onclick="window.location.href='./guide.html'">Guide</a></li>
                 </ul>
             </li>
             <li>
                 <a>
-                    <i class="bx bx-cog"></i>
-                    <span class="link_name">Setting</span>
+                    <i class='bx bx-help-circle' onclick="window.location.href='./help.html'"></i>
+                    <span class="link_name" onclick="window.location.href='./help.html'">Help</span>
                 </a>
                 <ul class="sub-menu blank">
-                    <li><a class="link_name">Setting</a></li>
+                    <li><a class="link_name" onclick="window.location.href='./help.html'">Help</a></li>
+                </ul>
+            </li>
+            <li>
+                <a>
+                    <i class="bx bx-cog" onclick="window.location.href='./setting.html'"></i>
+                    <span class="link_name" onclick="window.location.href='./setting.html'">Setting</span>
+                </a>
+                <ul class="sub-menu blank">
+                    <li><a class="link_name" onclick="window.location.href='./setting.html'">Setting</a></li>
                 </ul>
             </li>
         </ul>
@@ -88,11 +99,7 @@
                 <div class="hstack gap-3">
                     <div>
                         <i class="bx bxs-circle sensor-status-online"></i>
-                        <span class="sensor-total">5 Online</span>
-                    </div>
-                    <div>
-                        <i class="bx bxs-circle sensor-status-offline"></i>
-                        <span class="sensor-total">5 Offline</span>
+                        <span id="sensor-total" class="sensor-total">0 Online</span>
                     </div>
                     <button type="button" id="add-sensor" onclick="changeShadow()" data-bs-toggle="collapse"
                         data-bs-target="#collapseSensor" class="rounded-pill add-sensor-button" aria-expanded="true"

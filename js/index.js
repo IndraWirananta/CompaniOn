@@ -1,20 +1,17 @@
 // Listen for auth status changes
-auth.onAuthStateChanged((user) => {
-  if (user) {
-    console.log("user logged in: ", user);
-    // document.location.href = window.location.origin + "/main.html";
-    document.getElementById("start-now").classList.add("hide-start-button")
-    document.getElementById("go-to-apps").classList.remove("hide-start-button")
-    document.getElementById("login-button").classList.add("hide-start-button")
-    document.getElementById("logout").classList.remove("hide-start-button")
-  } else {
-    console.log("user logged out");
-    document.getElementById("start-now").classList.remove("hide-start-button")
-    document.getElementById("go-to-apps").classList.add("hide-start-button")
-    document.getElementById("login-button").classList.remove("hide-start-button")
-    document.getElementById("logout").classList.add("hide-start-button")
-  }
-});
+
+
+// change user welcome message
+function getWelcomeMessage() {
+  var welcomeMessage = document.getElementById("welcome-message-index");
+  db.collection("users")
+    .doc(userUid)
+    .onSnapshot((e) => {
+      var data = e.data().name;
+      welcomeMessage.innerHTML =  "Welcome back " + data;
+    });
+}
+
 //Go to apps
 const goToApps = document.querySelector('#go-to-apps');
 goToApps.addEventListener("click",(e)=>{
@@ -40,6 +37,7 @@ signupForm.addEventListener("submit", (e) => {
       email: email,
       name: name,
       password: password,
+      phone: "",
     });
     signupForm.reset();
   });
@@ -68,6 +66,38 @@ loginForm.addEventListener("submit", (e) => {
     console.log(cred.user);
     console.log("test");
     $("#loginPage").modal("hide");
+    $("#add-alert").remove();
     loginForm.reset();
+  },(error)=>{
+    console.log(error);
+    $("#add-alert").remove();
+    $("#alert-login").append(
+      '<div id="add-alert" class="alert alert-danger alert-dismissible fade show" role="alert">Email or password incorrect!<button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button></div>'
+    );
   });
 });
+
+window.onload = function(){
+  auth.onAuthStateChanged((user) => {
+    if (user) {
+      userUid=auth.currentUser.uid;
+      console.log("user logged in: ", user);
+      document.getElementById("start-now").classList.add("hide-element")
+      document.getElementById("go-to-apps").classList.remove("hide-element")
+      document.getElementById("login-button").classList.add("hide-element")
+      document.getElementById("logout").classList.remove("hide-element")
+      document.getElementById("login-a").classList.add("hide-element")
+      document.getElementById("login-b").classList.remove("hide-element")
+      getWelcomeMessage();
+      
+    } else {
+      console.log("user logged out");
+      document.getElementById("login-a").classList.remove("hide-element")
+      document.getElementById("login-b").classList.add("hide-element")
+      document.getElementById("start-now").classList.remove("hide-element")
+      document.getElementById("go-to-apps").classList.add("hide-element")
+      document.getElementById("login-button").classList.remove("hide-element")
+      document.getElementById("logout").classList.add("hide-element")
+    }
+  });
+}
